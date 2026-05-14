@@ -1,17 +1,15 @@
 :root {
   color-scheme: dark;
-  --bg: #0b1010;
-  --bg-band: #0f1b18;
-  --panel: #17211f;
-  --panel-alt: #1b2925;
-  --text: #eef8f4;
-  --muted: #a8bab3;
-  --line: #31463f;
-  --accent: #aef246;
-  --accent-dark: #d8ff9c;
-  --accent-soft: #243818;
-  --field: #101817;
-  --shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
+  --bg: #050505;
+  --panel: #111111;
+  --panel-soft: #171717;
+  --field: #080808;
+  --text: #f4f4f4;
+  --muted: #a8a8a8;
+  --line: #2c2c2c;
+  --line-strong: #484848;
+  --accent: #f2f2f2;
+  --shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
 }
 
 * {
@@ -21,8 +19,8 @@
 body {
   margin: 0;
   background:
-    linear-gradient(180deg, rgba(21, 31, 18, 0.88) 0, rgba(11, 16, 16, 0.96) 340px),
-    repeating-linear-gradient(135deg, var(--bg) 0 360px, var(--bg-band) 360px 720px);
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.045), transparent 34rem),
+    linear-gradient(180deg, #070707 0, var(--bg) 52rem);
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 17px;
@@ -33,18 +31,9 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  padding: 32px clamp(16px, 4vw, 48px) 24px;
+  padding: 34px clamp(16px, 4vw, 48px) 20px;
   border-bottom: 1px solid var(--line);
-  background: rgba(13, 22, 20, 0.92);
-}
-
-.eyebrow {
-  margin: 0 0 4px;
-  color: var(--accent);
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  text-transform: uppercase;
+  background: rgba(5, 5, 5, 0.92);
 }
 
 h1,
@@ -56,80 +45,117 @@ p {
 
 h1 {
   margin-bottom: 8px;
-  font-size: clamp(2rem, 3vw, 3.1rem);
-  line-height: 1.08;
+  font-size: clamp(2.15rem, 4vw, 4rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 
 h2 {
   margin-bottom: 0;
-  font-size: 1.18rem;
+  font-size: 1.2rem;
   line-height: 1.2;
   letter-spacing: 0;
 }
 
 h3 {
-  margin-bottom: 10px;
-  color: var(--accent-dark);
+  margin-bottom: 8px;
+  color: var(--text);
   font-size: 1rem;
   letter-spacing: 0;
 }
 
 .subtitle {
-  max-width: 740px;
+  max-width: 760px;
   margin-bottom: 0;
   color: var(--muted);
-  font-size: 1.08rem;
+  font-size: 1.03rem;
 }
 
 .privacy-note {
   align-self: flex-start;
-  max-width: 260px;
+  max-width: 270px;
   padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--accent-soft);
-  color: var(--accent-dark);
-  font-size: 0.96rem;
+  background: #101010;
+  color: #d8d8d8;
+  font-size: 0.94rem;
   font-weight: 650;
+}
+
+.section-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 14px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(5, 5, 5, 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.tab-button,
+.drug-buttons button {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #0d0d0d;
+  color: #d6d6d6;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
+.tab-button:hover,
+.drug-buttons button:hover {
+  border-color: var(--line-strong);
+  background: #181818;
+  color: #ffffff;
+}
+
+.tab-button.active,
+.drug-buttons button.active {
+  border-color: #f4f4f4;
+  background: #f4f4f4;
+  color: #050505;
+}
+
+.tab-page {
+  display: none;
+}
+
+.tab-page.active {
+  display: block;
 }
 
 .dashboard {
   display: grid;
-  grid-auto-flow: dense;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: stretch;
+  align-items: start;
   gap: 18px;
-  padding: 24px clamp(16px, 4vw, 48px) 28px;
+  padding: 24px clamp(16px, 4vw, 48px) 30px;
 }
 
 .calculator-card {
   display: flex;
-  grid-column: span 4;
+  grid-column: span 6;
   flex-direction: column;
   gap: 14px;
   min-height: 100%;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: linear-gradient(180deg, var(--panel) 0, var(--panel-alt) 100%);
+  background: linear-gradient(180deg, var(--panel) 0, #0d0d0d 100%);
   box-shadow: var(--shadow);
 }
 
 .wide-card {
   grid-column: span 8;
-}
-
-.compact-card {
-  grid-column: span 4;
-}
-
-.tall-card {
-  grid-row: span 2;
-}
-
-.calculator-card:nth-child(even) {
-  background: linear-gradient(180deg, #162823 0, #10201d 100%);
 }
 
 .card-header {
@@ -144,15 +170,15 @@ fieldset {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: #c5d8d1;
-  font-size: 0.96rem;
+  color: #d0d0d0;
+  font-size: 0.95rem;
   font-weight: 650;
 }
 
 input {
   width: 100%;
   min-height: 42px;
-  border: 1px solid #3c5750;
+  border: 1px solid var(--line-strong);
   border-radius: 6px;
   background: var(--field);
   color: var(--text);
@@ -161,8 +187,8 @@ input {
 }
 
 input:focus {
-  border-color: var(--accent);
-  outline: 3px solid rgba(174, 242, 70, 0.18);
+  border-color: #f5f5f5;
+  outline: 3px solid rgba(255, 255, 255, 0.13);
 }
 
 .two-column,
@@ -184,7 +210,7 @@ input:focus {
 .subpanel {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(16, 24, 23, 0.78);
+  background: #0b0b0b;
   padding: 12px;
 }
 
@@ -200,8 +226,8 @@ input:focus {
 .segmented legend {
   width: 100%;
   margin-bottom: 2px;
-  color: #c5d8d1;
-  font-size: 0.96rem;
+  color: #d0d0d0;
+  font-size: 0.95rem;
   font-weight: 650;
 }
 
@@ -211,15 +237,15 @@ input:focus {
   align-items: center;
   gap: 8px;
   border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 8px 10px;
-  background: rgba(16, 24, 23, 0.78);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #0b0b0b;
 }
 
 .segmented input {
   width: auto;
   min-height: auto;
-  accent-color: var(--accent);
+  accent-color: #f4f4f4;
 }
 
 .result-grid {
@@ -229,16 +255,11 @@ input:focus {
 }
 
 .result-box,
-.result-table div {
-  border: 1px solid #cfe0dd;
-  border-color: #46665d;
+.drug-box {
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: var(--accent-soft);
+  background: #0a0a0a;
   padding: 12px;
-}
-
-.result-box.wide {
-  margin-top: 0;
 }
 
 .result-span {
@@ -246,23 +267,49 @@ input:focus {
 }
 
 .result-box span,
-.result-table span {
+.drug-box span {
   display: block;
-  color: var(--accent-dark);
+  color: var(--muted);
   font-size: 0.86rem;
   font-weight: 750;
   text-transform: uppercase;
 }
 
 .result-box strong,
-.result-table strong {
-  white-space: pre-line;
+.drug-box strong {
   display: block;
-  margin-top: 4px;
-  color: #f1fff9;
+  margin-top: 5px;
+  color: #ffffff;
   font-size: 1.42rem;
-  line-height: 1.2;
+  line-height: 1.22;
   overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.drug-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.drug-box h3 {
+  margin-bottom: 2px;
+}
+
+.drug-box span {
+  color: #c4c4c4;
+  font-size: 0.9rem;
+  text-transform: none;
+}
+
+.drug-box strong {
+  font-size: 1.08rem;
+}
+
+.drug-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .interpretation {
@@ -272,26 +319,27 @@ input:focus {
   font-weight: 650;
 }
 
-.result-table {
-  display: grid;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.formula-note {
-  margin: auto 0 0;
+.formula-note,
+.warning-note {
+  margin: 0;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.warning-note {
+  color: #f1f1f1;
+  border-left: 3px solid #f1f1f1;
+  padding-left: 10px;
 }
 
 .app-footer {
   padding: 0 clamp(16px, 4vw, 48px) 36px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .app-footer a {
-  color: var(--accent);
+  color: #f4f4f4;
   font-weight: 700;
 }
 
@@ -301,12 +349,12 @@ input:focus {
   }
 
   .calculator-card,
-  .compact-card {
-    grid-column: span 4;
-  }
-
   .wide-card {
     grid-column: span 8;
+  }
+
+  .drug-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -321,10 +369,10 @@ input:focus {
 
   .dashboard {
     grid-template-columns: 1fr;
+    padding-inline: 14px;
   }
 
   .calculator-card,
-  .compact-card,
   .wide-card {
     grid-column: 1;
   }
@@ -332,11 +380,8 @@ input:focus {
   .two-column,
   .three-column,
   .warfarin-grid,
-  .result-grid {
+  .result-grid,
+  .drug-grid {
     grid-template-columns: 1fr;
-  }
-
-  .calculator-card {
-    min-height: auto;
   }
 }

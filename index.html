@@ -9,231 +9,227 @@
   <body>
     <header class="app-header">
       <div>
-        <p class="eyebrow">Local medical tools</p>
         <h1>Medical Calculator</h1>
-        <p class="subtitle">
-          Fast bedside calculations for OPD and ward workflow. Results are drafts for clinician verification.
-        </p>
+        <p class="subtitle">Fast bedside calculations for OPD and ward workflow. Verify all outputs before clinical use.</p>
       </div>
-      <div class="privacy-note">
-        Runs locally in your browser. No login, no server, no cloud storage.
-      </div>
+      <div class="privacy-note">Runs locally in your browser. No login, no server, no cloud storage.</div>
     </header>
 
-    <main class="dashboard">
-      <section class="calculator-card compact-card" id="calendar-card">
-        <div class="card-header">
-          <h2>Calendar Due Date</h2>
-        </div>
-        <label>
-          Target date
-          <input id="targetDate" type="date" />
-        </label>
-        <div class="result-grid">
-          <div class="result-box">
-            <span>Days from today</span>
-            <strong id="dateDays">-</strong>
-          </div>
-          <div class="result-box">
-            <span>Weeks, rounded up</span>
-            <strong id="dateWeeks">-</strong>
-          </div>
-        </div>
-        <p class="formula-note">Weeks = ceiling(days / 7). Negative values mean the date is in the past.</p>
-      </section>
+    <nav class="section-tabs" aria-label="Calculator sections">
+      <button class="tab-button active" data-tab="due-date" type="button">Due date</button>
+      <button class="tab-button" data-tab="warfarin" type="button">Warfarin</button>
+      <button class="tab-button" data-tab="anti-tb" type="button">Anti-TB</button>
+      <button class="tab-button" data-tab="crcl" type="button">CrCl</button>
+      <button class="tab-button" data-tab="electrolyte" type="button">Electrolyte</button>
+      <button class="tab-button" data-tab="fib" type="button">FIB-4 & APRI</button>
+    </nav>
 
-      <section class="calculator-card wide-card" id="warfarin-card">
-        <div class="card-header">
-          <h2>Warfarin Tablet Count</h2>
-        </div>
-        <label>
-          Prescription duration (days)
-          <input id="warfarinDays" type="number" min="1" step="1" value="28" />
-        </label>
-        <div class="warfarin-grid">
-          <div class="subpanel">
-            <h3>Warfarin No.1</h3>
-            <div class="two-column">
-              <label>Tabs/day <input id="warfarin1TabsPerDay" type="number" min="0" step="0.25" value="1" /></label>
-              <label>Days/week <input id="warfarin1DaysPerWeek" type="number" min="0" max="7" step="1" value="7" /></label>
+    <main>
+      <section class="tab-page active" id="due-date" aria-labelledby="due-date-tab">
+        <div class="dashboard">
+          <section class="calculator-card" id="calendar-card">
+            <div class="card-header"><h2>Calendar Due Date</h2></div>
+            <label>Target date <input id="targetDate" type="date" /></label>
+            <div class="result-grid">
+              <div class="result-box"><span>Days from today</span><strong id="dateDays">-</strong></div>
+              <div class="result-box"><span>Weeks, rounded up</span><strong id="dateWeeks">-</strong></div>
             </div>
-          </div>
-          <div class="subpanel">
-            <h3>Warfarin No.2</h3>
+            <p class="formula-note">Weeks = ceiling(days / 7). Negative values mean the date is in the past.</p>
+          </section>
+
+          <section class="calculator-card" id="appointment-card">
+            <div class="card-header"><h2>Appointment</h2></div>
             <div class="two-column">
-              <label>Tabs/day <input id="warfarin2TabsPerDay" type="number" min="0" step="0.25" value="0" /></label>
-              <label>Days/week <input id="warfarin2DaysPerWeek" type="number" min="0" max="7" step="1" value="0" /></label>
+              <label>Week <input id="appointmentWeeks" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="4" /></label>
+              <label>Month <input id="appointmentMonths" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="0" /></label>
             </div>
-          </div>
+            <div class="result-grid">
+              <div class="result-box result-span"><span>Appointment date</span><strong id="appointmentDate">-</strong></div>
+              <div class="result-box"><span>Days from today</span><strong id="appointmentDays">-</strong></div>
+              <div class="result-box"><span>Weeks, rounded up</span><strong id="appointmentRoundedWeeks">-</strong></div>
+            </div>
+            <p class="formula-note">The result keeps the same weekday as today.</p>
+          </section>
         </div>
-        <div class="result-grid">
-          <div class="result-box">
-            <span>Warfarin No.1</span>
-            <strong id="warfarin1Total">-</strong>
-          </div>
-          <div class="result-box">
-            <span>Warfarin No.2</span>
-            <strong id="warfarin2Total">-</strong>
-          </div>
-          <div class="result-box result-span">
-            <span>Total Warfarin No.1 + No.2</span>
-            <strong id="warfarinGrandTotal">-</strong>
-          </div>
-        </div>
-        <p class="formula-note">Duration is counted by days. Weekly pattern is repeated until the prescription days are complete.</p>
       </section>
 
-      <section class="calculator-card" id="warfarin-change-card">
-        <div class="card-header">
-          <h2>Warfarin Dose Change</h2>
+      <section class="tab-page" id="warfarin">
+        <div class="dashboard">
+          <section class="calculator-card wide-card" id="warfarin-card">
+            <div class="card-header"><h2>Warfarin Tablet Count</h2></div>
+            <label>Prescription duration (days) <input id="warfarinDays" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="28" /></label>
+            <div class="warfarin-grid">
+              <div class="subpanel">
+                <h3>Warfarin No.1</h3>
+                <div class="two-column">
+                  <label>Tabs/day <input id="warfarin1TabsPerDay" type="number" inputmode="decimal" min="0" step="0.25" value="1" /></label>
+                  <label>Days/week <input id="warfarin1DaysPerWeek" type="number" inputmode="numeric" pattern="[0-9]*" min="0" max="7" step="1" value="7" /></label>
+                </div>
+              </div>
+              <div class="subpanel">
+                <h3>Warfarin No.2</h3>
+                <div class="two-column">
+                  <label>Tabs/day <input id="warfarin2TabsPerDay" type="number" inputmode="decimal" min="0" step="0.25" value="0" /></label>
+                  <label>Days/week <input id="warfarin2DaysPerWeek" type="number" inputmode="numeric" pattern="[0-9]*" min="0" max="7" step="1" value="0" /></label>
+                </div>
+              </div>
+            </div>
+            <div class="result-grid">
+              <div class="result-box"><span>Warfarin No.1</span><strong id="warfarin1Total">-</strong></div>
+              <div class="result-box"><span>Warfarin No.2</span><strong id="warfarin2Total">-</strong></div>
+              <div class="result-box result-span"><span>Total Warfarin No.1 + No.2</span><strong id="warfarinGrandTotal">-</strong></div>
+            </div>
+            <p class="formula-note">Duration is counted by days. Weekly pattern is repeated until prescription days are complete.</p>
+          </section>
+
+          <section class="calculator-card" id="warfarin-change-card">
+            <div class="card-header"><h2>Warfarin Dose Change</h2></div>
+            <div class="two-column">
+              <label>Original dose (mg/week) <input id="warfarinOriginalDose" type="number" inputmode="decimal" min="0" step="0.5" value="21" /></label>
+              <label>Intended change (%) <input id="warfarinPercentChange" type="number" inputmode="numeric" step="1" value="10" /></label>
+            </div>
+            <div class="result-grid">
+              <div class="result-box"><span>Dose after change</span><strong id="warfarinChangedDose">-</strong></div>
+              <div class="result-box"><span>Actual change</span><strong id="warfarinActualChange">-</strong></div>
+              <div class="result-box result-span"><span>Dose difference</span><strong id="warfarinDoseDifference">-</strong></div>
+            </div>
+          </section>
         </div>
-        <div class="two-column">
-          <label>
-            Original dose (mg/week)
-            <input id="warfarinOriginalDose" type="number" min="0" step="0.5" value="21" />
-          </label>
-          <label>
-            Intended change (%)
-            <input id="warfarinPercentChange" type="number" step="1" value="10" />
-          </label>
-        </div>
-        <div class="result-grid">
-          <div class="result-box">
-            <span>Dose after change</span>
-            <strong id="warfarinChangedDose">-</strong>
-          </div>
-          <div class="result-box">
-            <span>Actual change</span>
-            <strong id="warfarinActualChange">-</strong>
-          </div>
-          <div class="result-box result-span">
-            <span>Dose difference</span>
-            <strong id="warfarinDoseDifference">-</strong>
-          </div>
-        </div>
-        <p class="formula-note">Dose is rounded to the nearest 0.5 mg/week, then actual percentage change is recalculated.</p>
       </section>
 
-      <section class="calculator-card wide-card tall-card" id="tb-card">
-        <div class="card-header">
-          <h2>Anti-TB Dosage</h2>
+      <section class="tab-page" id="anti-tb">
+        <div class="dashboard">
+          <section class="calculator-card wide-card" id="tb-card">
+            <div class="card-header"><h2>Anti-TB Dosage</h2></div>
+            <label>Body weight (kg) <input id="tbWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
+            <p class="warning-note">Invalid if patient body weight is less than 5 kg.</p>
+            <div class="drug-grid">
+              <div class="drug-box"><h3>Isoniazid</h3><span id="inhPrep">300 mg</span><strong id="inhDose">-</strong></div>
+              <div class="drug-box"><h3>Rifampicin</h3><span id="rifPrep">-</span><strong id="rifDose">-</strong></div>
+              <div class="drug-box"><h3>Pyrazinamide</h3><span id="pzaPrep">-</span><strong id="pzaDose">-</strong></div>
+              <div class="drug-box"><h3>Ethambutol</h3><span id="embPrep">-</span><strong id="embDose">-</strong></div>
+              <div class="drug-box"><h3>Levofloxacin</h3><span id="lfxPrep">500 mg</span><strong id="lfxDose">-</strong></div>
+              <div class="drug-box"><h3>Amikacin</h3><span id="amkPrep">500 mg/ 2 ml</span><strong id="amkDose">-</strong></div>
+            </div>
+            <p class="formula-note">Assumes normal CrCl. Adjust for renal function, toxicity, regimen, and local guideline.</p>
+          </section>
         </div>
-        <label>
-          Body weight (kg)
-          <input id="tbWeight" type="number" min="1" step="0.1" value="60" />
-        </label>
-        <div class="result-table">
-          <div><span id="inhTitle">Isoniazid</span><strong id="inhDose">-</strong></div>
-          <div><span id="rifTitle">Rifampicin</span><strong id="rifDose">-</strong></div>
-          <div><span id="pzaTitle">Pyrazinamide</span><strong id="pzaDose">-</strong></div>
-          <div><span id="embTitle">Ethambutol</span><strong id="embDose">-</strong></div>
-          <div><span id="lfxTitle">Levofloxacin</span><strong id="lfxDose">-</strong></div>
-          <div><span id="amkTitle">Amikacin</span><strong id="amkDose">-</strong></div>
-        </div>
-        <p class="formula-note">Based on your shortcut. Assumes normal CrCl. Adjust for renal function, toxicity, regimen, and local guideline.</p>
       </section>
 
-      <section class="calculator-card compact-card" id="crcl-card">
-        <div class="card-header">
-          <h2>Creatinine Clearance</h2>
+      <section class="tab-page" id="crcl">
+        <div class="dashboard">
+          <section class="calculator-card" id="crcl-card">
+            <div class="card-header"><h2>Creatinine Clearance</h2></div>
+            <div class="three-column">
+              <label>Age <input id="crclAge" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="65" /></label>
+              <label>Weight (kg) <input id="crclWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
+              <label>SCr (mg/dL) <input id="crclScr" type="number" inputmode="decimal" min="0.1" step="0.01" value="1.0" /></label>
+            </div>
+            <fieldset class="segmented">
+              <legend>Sex</legend>
+              <label><input type="radio" name="crclSex" value="male" checked /> Male</label>
+              <label><input type="radio" name="crclSex" value="female" /> Female</label>
+            </fieldset>
+            <div class="result-box wide"><span>Estimated Creatinine Clearance</span><strong id="crclResult">-</strong></div>
+          </section>
+
+          <section class="calculator-card wide-card" id="renal-dose-card">
+            <div class="card-header"><h2>Renal Dose of Antibiotics</h2></div>
+            <div class="drug-buttons" id="renalDrugButtons"></div>
+            <div class="result-box result-span"><span>Selected renal dose</span><strong id="renalDoseResult">Select antibiotic</strong></div>
+            <p class="formula-note">Screening aid only. Verify with local renal dosing guideline, indication, severity, dialysis status, and pharmacist/ID team.</p>
+          </section>
         </div>
-        <div class="three-column">
-          <label>Age <input id="crclAge" type="number" min="1" step="1" value="65" /></label>
-          <label>Weight (kg) <input id="crclWeight" type="number" min="1" step="0.1" value="60" /></label>
-          <label>SCr (mg/dL) <input id="crclScr" type="number" min="0.1" step="0.01" value="1.0" /></label>
-        </div>
-        <fieldset class="segmented">
-          <legend>Sex</legend>
-          <label><input type="radio" name="crclSex" value="male" checked /> Male</label>
-          <label><input type="radio" name="crclSex" value="female" /> Female</label>
-        </fieldset>
-        <div class="result-box wide">
-          <span>Estimated Creatinine Clearance</span>
-          <strong id="crclResult">-</strong>
-        </div>
-        <p class="formula-note">CrCl = ((140 - age) x weight) / (72 x SCr); multiply by 0.85 for female.</p>
       </section>
 
-      <section class="calculator-card wide-card" id="fib-card">
-        <div class="card-header">
-          <h2>FIB-4 and APRI</h2>
+      <section class="tab-page" id="electrolyte">
+        <div class="dashboard">
+          <section class="calculator-card" id="sodium-card">
+            <div class="card-header"><h2>Corrected Sodium</h2></div>
+            <div class="two-column">
+              <label>Measured sodium (mmol/L) <input id="sodium" type="number" inputmode="decimal" step="0.1" value="130" /></label>
+              <label>Glucose (mg/dL) <input id="glucose" type="number" inputmode="numeric" min="0" step="1" value="400" /></label>
+            </div>
+            <fieldset class="segmented">
+              <legend>Correction factor per 100 mg/dL glucose above 100</legend>
+              <label><input type="radio" name="naFactor" value="1.6" checked /> 1.6</label>
+              <label><input type="radio" name="naFactor" value="2.4" /> 2.4</label>
+            </fieldset>
+            <div class="result-box wide"><span>Corrected sodium</span><strong id="correctedSodium">-</strong></div>
+          </section>
+
+          <section class="calculator-card" id="calcium-card">
+            <div class="card-header"><h2>Corrected Calcium</h2></div>
+            <div class="two-column">
+              <label>Measured calcium (mg/dL) <input id="calcium" type="number" inputmode="decimal" min="0" step="0.1" value="8.0" /></label>
+              <label>Albumin (g/dL) <input id="albumin" type="number" inputmode="decimal" min="0" step="0.1" value="3.0" /></label>
+            </div>
+            <div class="result-box wide"><span>Corrected calcium</span><strong id="correctedCalcium">-</strong></div>
+          </section>
+
+          <section class="calculator-card" id="bicarbonate-card">
+            <div class="card-header"><h2>Bicarbonate Deficit</h2></div>
+            <div class="three-column">
+              <label>Weight (kg) <input id="bicarbWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
+              <label>Current HCO3 <input id="currentBicarb" type="number" inputmode="decimal" min="0" step="0.1" value="12" /></label>
+              <label>Target HCO3 <input id="targetBicarb" type="number" inputmode="decimal" min="0" step="0.1" value="24" /></label>
+            </div>
+            <div class="result-box wide"><span>Bicarbonate deficit</span><strong id="bicarbDeficit">-</strong></div>
+            <p class="formula-note">Deficit = 0.5 x weight x (target - current).</p>
+          </section>
+
+          <section class="calculator-card" id="water-card">
+            <div class="card-header"><h2>Water Deficit</h2></div>
+            <div class="three-column">
+              <label>Weight (kg) <input id="waterWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
+              <label>Current Na <input id="waterSodium" type="number" inputmode="decimal" min="1" step="0.1" value="160" /></label>
+              <label>Target Na <input id="targetSodium" type="number" inputmode="decimal" min="1" step="0.1" value="140" /></label>
+            </div>
+            <fieldset class="segmented">
+              <legend>Sex</legend>
+              <label><input type="radio" name="waterSex" value="male" checked /> Male</label>
+              <label><input type="radio" name="waterSex" value="female" /> Female</label>
+            </fieldset>
+            <div class="result-box wide"><span>Water deficit</span><strong id="waterDeficit">-</strong></div>
+            <p class="formula-note">TBW factor: male 0.6, female 0.5.</p>
+          </section>
         </div>
-        <div class="two-column">
-          <label>Age <input id="fibAge" type="number" min="1" step="1" value="55" /></label>
-          <label>Platelets (10^9/L) <input id="platelets" type="number" min="1" step="1" value="180" /></label>
-          <label>AST (U/L) <input id="ast" type="number" min="1" step="1" value="60" /></label>
-          <label>ALT (U/L) <input id="alt" type="number" min="1" step="1" value="55" /></label>
-        </div>
-        <fieldset class="segmented">
-          <legend>Sex for AST ULN</legend>
-          <label><input type="radio" name="fibSex" value="male" checked /> Male</label>
-          <label><input type="radio" name="fibSex" value="female" /> Female</label>
-        </fieldset>
-        <div class="result-grid">
-          <div class="result-box">
-            <span>FIB-4</span>
-            <strong id="fib4Result">-</strong>
-            <p id="fib4Interpretation" class="interpretation">-</p>
-          </div>
-          <div class="result-box">
-            <span>APRI</span>
-            <strong id="apriResult">-</strong>
-            <p id="apriInterpretation" class="interpretation">-</p>
-          </div>
-        </div>
-        <p class="formula-note">APRI uses AST ULN from shortcut: male 50, female 35.</p>
       </section>
 
-      <section class="calculator-card compact-card" id="calcium-card">
-        <div class="card-header">
-          <h2>Corrected Calcium</h2>
+      <section class="tab-page" id="fib">
+        <div class="dashboard">
+          <section class="calculator-card wide-card" id="fib-card">
+            <div class="card-header"><h2>FIB-4 and APRI</h2></div>
+            <div class="two-column">
+              <label>Age <input id="fibAge" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="55" /></label>
+              <label>Platelets (10^9/L) <input id="platelets" type="number" inputmode="numeric" min="1" step="1" value="180" /></label>
+              <label>AST (U/L) <input id="ast" type="number" inputmode="numeric" min="1" step="1" value="60" /></label>
+              <label>ALT (U/L) <input id="alt" type="number" inputmode="numeric" min="1" step="1" value="55" /></label>
+            </div>
+            <fieldset class="segmented">
+              <legend>Sex for AST ULN</legend>
+              <label><input type="radio" name="fibSex" value="male" checked /> Male</label>
+              <label><input type="radio" name="fibSex" value="female" /> Female</label>
+            </fieldset>
+            <fieldset class="segmented">
+              <legend>Condition</legend>
+              <label><input type="radio" name="fibCondition" value="hbv" checked /> HBV</label>
+              <label><input type="radio" name="fibCondition" value="hcv" /> HCV</label>
+              <label><input type="radio" name="fibCondition" value="masld" /> MASLD</label>
+            </fieldset>
+            <div class="result-grid">
+              <div class="result-box"><span>FIB-4</span><strong id="fib4Result">-</strong><p id="fib4Interpretation" class="interpretation">-</p></div>
+              <div class="result-box"><span>APRI</span><strong id="apriResult">-</strong><p id="apriInterpretation" class="interpretation">-</p></div>
+            </div>
+            <p class="formula-note">In age &lt;35 or &gt;65, FIB-4 is less reliable.</p>
+          </section>
         </div>
-        <div class="two-column">
-          <label>Measured calcium (mg/dL) <input id="calcium" type="number" min="0" step="0.1" value="8.0" /></label>
-          <label>Albumin (g/dL) <input id="albumin" type="number" min="0" step="0.1" value="3.0" /></label>
-        </div>
-        <div class="result-box wide">
-          <span>Corrected calcium</span>
-          <strong id="correctedCalcium">-</strong>
-        </div>
-        <p class="formula-note">Corrected Ca = measured Ca + 0.8 x (4.0 - albumin), using mg/dL and g/dL.</p>
-      </section>
-
-      <section class="calculator-card compact-card" id="sodium-card">
-        <div class="card-header">
-          <h2>Corrected Sodium</h2>
-        </div>
-        <div class="two-column">
-          <label>Measured sodium (mmol/L) <input id="sodium" type="number" step="0.1" value="130" /></label>
-          <label>Glucose (mg/dL) <input id="glucose" type="number" min="0" step="1" value="400" /></label>
-        </div>
-        <fieldset class="segmented">
-          <legend>Correction factor per 100 mg/dL glucose above 100</legend>
-          <label><input type="radio" name="naFactor" value="1.6" checked /> 1.6</label>
-          <label><input type="radio" name="naFactor" value="2.4" /> 2.4</label>
-        </fieldset>
-        <div class="result-box wide">
-          <span>Corrected sodium</span>
-          <strong id="correctedSodium">-</strong>
-        </div>
-        <p class="formula-note">Corrected Na = measured Na + factor x ((glucose - 100) / 100). No correction is added when glucose is below 100.</p>
       </section>
     </main>
 
     <footer class="app-footer">
-      <p>
-        Clinical note: this app is a calculation aid only. Verify all outputs before use in patient care.
-      </p>
-      <p>
-        References:
-        <a href="https://www.cdc.gov/tb/hcp/treatment/tuberculosis-disease.html">CDC TB treatment</a>,
-        <a href="https://medicalguidelines.msf.org/en/viewport/TUB/english/tuberculosis-drug-information-sheets-20323833.html">MSF TB drug sheets</a>,
-        <a href="https://www.kidney.org/professionals/kdoqi/gfr_calculatorCoc">NKF Cockcroft-Gault</a>,
-        <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/fib-4">Hepatitis C Online FIB-4</a>,
-        <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/apri">Hepatitis C Online APRI</a>,
-        <a href="https://reference.medscape.com/calculator/267/calcium-correction-for-hypoalbuminemia">Medscape calcium correction</a>,
-        <a href="https://pubmed.ncbi.nlm.nih.gov/?term=10225241">Hillier sodium correction</a>
-      </p>
+      <p>Clinical note: this app is a calculation aid only. Verify all outputs before use in patient care.</p>
+      <p>References: <a href="https://idmp.ucsf.edu/adult-antimicrobial-dosing-non-dialysis">UCSF IDMP antimicrobial dosing</a>, <a href="https://www.cdc.gov/tb/hcp/treatment/tuberculosis-disease.html">CDC TB treatment</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/fib-4">Hepatitis C Online FIB-4</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/apri">Hepatitis C Online APRI</a></p>
     </footer>
 
     <script src="app.js"></script>

@@ -12,14 +12,17 @@ https://pheseems.github.io/Medical-Calculator/
 
 ## Included Calculators
 
-- Calendar due date: days and rounded-up weeks from today
+- Calendar due date and appointment date
 - Warfarin tablet count
 - Warfarin dose change
 - Anti-TB dosage
 - Creatinine clearance by Cockcroft-Gault
+- Renal dose screening for selected antibiotics
 - FIB-4 and APRI score with interpretation
 - Corrected calcium for hypoalbuminemia
 - Corrected sodium for hyperglycemia
+- Bicarbonate deficit
+- Water deficit
 
 ## Design Goals
 
