@@ -8,7 +8,7 @@ The app is designed as a lightweight personal clinical aid: fast to open, simple
 
 If GitHub Pages is enabled, the app should be available at:
 
-https://pheseems.github.io/Medical/
+https://pheseems.github.io/Medical-Calculator/
 
 ## Included Calculators
 
