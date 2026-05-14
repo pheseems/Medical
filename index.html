@@ -16,16 +16,16 @@
     </header>
 
     <nav class="section-tabs" aria-label="Calculator sections">
-      <button class="tab-button active" data-tab="due-date" type="button">Due date</button>
-      <button class="tab-button" data-tab="warfarin" type="button">Warfarin</button>
-      <button class="tab-button" data-tab="anti-tb" type="button">Anti-TB</button>
-      <button class="tab-button" data-tab="crcl" type="button">CrCl</button>
-      <button class="tab-button" data-tab="electrolyte" type="button">Electrolyte</button>
-      <button class="tab-button" data-tab="fib" type="button">FIB-4 & APRI</button>
+      <button class="tab-button active" data-tab="due-date" type="button">📅 Due date</button>
+      <button class="tab-button" data-tab="warfarin" type="button">🩸 Warfarin</button>
+      <button class="tab-button" data-tab="anti-tb" type="button">💊 Anti-TB</button>
+      <button class="tab-button" data-tab="crcl" type="button">🧪 Creatinine clearance</button>
+      <button class="tab-button" data-tab="electrolyte" type="button">⚡ Electrolyte</button>
+      <button class="tab-button" data-tab="fib" type="button">🧬 FIB-4 & APRI</button>
     </nav>
 
     <main>
-      <section class="tab-page active" id="due-date" aria-labelledby="due-date-tab">
+      <section class="tab-page active due-date-theme" id="due-date" aria-labelledby="due-date-tab">
         <div class="dashboard">
           <section class="calculator-card" id="calendar-card">
             <div class="card-header"><h2>Calendar Due Date</h2></div>
@@ -53,7 +53,7 @@
         </div>
       </section>
 
-      <section class="tab-page" id="warfarin">
+      <section class="tab-page warfarin-theme" id="warfarin">
         <div class="dashboard">
           <section class="calculator-card wide-card" id="warfarin-card">
             <div class="card-header"><h2>Warfarin Tablet Count</h2></div>
@@ -97,7 +97,7 @@
         </div>
       </section>
 
-      <section class="tab-page" id="anti-tb">
+      <section class="tab-page tb-theme" id="anti-tb">
         <div class="dashboard">
           <section class="calculator-card wide-card" id="tb-card">
             <div class="card-header"><h2>Anti-TB Dosage</h2></div>
@@ -112,11 +112,12 @@
               <div class="drug-box"><h3>Amikacin</h3><span id="amkPrep">500 mg/ 2 ml</span><strong id="amkDose">-</strong></div>
             </div>
             <p class="formula-note">Assumes normal CrCl. Adjust for renal function, toxicity, regimen, and local guideline.</p>
+            <p class="formula-note">Max dose: INH 300 mg/day, rifampicin 600 mg/day, pyrazinamide 2000 mg/day, ethambutol 1200 mg/day, levofloxacin 1500 mg/day, amikacin 1000 mg/day.</p>
           </section>
         </div>
       </section>
 
-      <section class="tab-page" id="crcl">
+      <section class="tab-page crcl-theme" id="crcl">
         <div class="dashboard">
           <section class="calculator-card" id="crcl-card">
             <div class="card-header"><h2>Creatinine Clearance</h2></div>
@@ -125,16 +126,17 @@
               <label>Weight (kg) <input id="crclWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
               <label>SCr (mg/dL) <input id="crclScr" type="number" inputmode="decimal" min="0.1" step="0.01" value="1.0" /></label>
             </div>
-            <fieldset class="segmented">
-              <legend>Sex</legend>
-              <label><input type="radio" name="crclSex" value="male" checked /> Male</label>
-              <label><input type="radio" name="crclSex" value="female" /> Female</label>
-            </fieldset>
+            <label>Sex
+              <select id="crclSex">
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+              </select>
+            </label>
             <div class="result-box wide"><span>Estimated Creatinine Clearance</span><strong id="crclResult">-</strong></div>
           </section>
 
           <section class="calculator-card wide-card" id="renal-dose-card">
-            <div class="card-header"><h2>Renal Dose of Antibiotics</h2></div>
+            <div class="card-header"><h2>Renal Dose of Antibiotics</h2><span class="beta-tag">Beta</span></div>
             <div class="drug-buttons" id="renalDrugButtons"></div>
             <div class="result-box result-span"><span>Selected renal dose</span><strong id="renalDoseResult">Select antibiotic</strong></div>
             <p class="formula-note">Screening aid only. Verify with local renal dosing guideline, indication, severity, dialysis status, and pharmacist/ID team.</p>
@@ -142,7 +144,7 @@
         </div>
       </section>
 
-      <section class="tab-page" id="electrolyte">
+      <section class="tab-page electrolyte-theme" id="electrolyte">
         <div class="dashboard">
           <section class="calculator-card" id="sodium-card">
             <div class="card-header"><h2>Corrected Sodium</h2></div>
@@ -156,6 +158,7 @@
               <label><input type="radio" name="naFactor" value="2.4" /> 2.4</label>
             </fieldset>
             <div class="result-box wide"><span>Corrected sodium</span><strong id="correctedSodium">-</strong></div>
+            <p class="formula-note">Use 1.6 for routine correction. Consider 2.4 in marked hyperglycemia, especially glucose &gt;400 mg/dL, then verify clinically.</p>
           </section>
 
           <section class="calculator-card" id="calcium-card">
@@ -185,18 +188,19 @@
               <label>Current Na <input id="waterSodium" type="number" inputmode="decimal" min="1" step="0.1" value="160" /></label>
               <label>Target Na <input id="targetSodium" type="number" inputmode="decimal" min="1" step="0.1" value="140" /></label>
             </div>
-            <fieldset class="segmented">
-              <legend>Sex</legend>
-              <label><input type="radio" name="waterSex" value="male" checked /> Male</label>
-              <label><input type="radio" name="waterSex" value="female" /> Female</label>
-            </fieldset>
+            <label>Sex
+              <select id="waterSex">
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+              </select>
+            </label>
             <div class="result-box wide"><span>Water deficit</span><strong id="waterDeficit">-</strong></div>
             <p class="formula-note">TBW factor: male 0.6, female 0.5.</p>
           </section>
         </div>
       </section>
 
-      <section class="tab-page" id="fib">
+      <section class="tab-page fib-theme" id="fib">
         <div class="dashboard">
           <section class="calculator-card wide-card" id="fib-card">
             <div class="card-header"><h2>FIB-4 and APRI</h2></div>
@@ -206,11 +210,12 @@
               <label>AST (U/L) <input id="ast" type="number" inputmode="numeric" min="1" step="1" value="60" /></label>
               <label>ALT (U/L) <input id="alt" type="number" inputmode="numeric" min="1" step="1" value="55" /></label>
             </div>
-            <fieldset class="segmented">
-              <legend>Sex for AST ULN</legend>
-              <label><input type="radio" name="fibSex" value="male" checked /> Male</label>
-              <label><input type="radio" name="fibSex" value="female" /> Female</label>
-            </fieldset>
+            <label>Sex for AST ULN
+              <select id="fibSex">
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+              </select>
+            </label>
             <fieldset class="segmented">
               <legend>Condition</legend>
               <label><input type="radio" name="fibCondition" value="hbv" checked /> HBV</label>

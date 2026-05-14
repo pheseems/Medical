@@ -119,25 +119,25 @@ const renalDoseTable = {
 };
 
 const renalButtonLabels = [
-  ["Ceftazidime", "Ceftazidime"],
-  ["Piperacillin-Tazobactam", "Tazocin"],
-  ["Meropenem", "Meropenem"],
-  ["Ertapenem", "Ertapenem"],
-  ["Colistin", "Colistin"],
-  ["Cefoperazone-Sulbactam", "Sulperazone"],
+  ["Acyclovir", "Acyclovir"],
   ["Amikacin", "Amikacin"],
-  ["Vancomycin", "Vancomycin"],
+  ["Amoxicillin-Clavulonate", "Augmentin"],
+  ["Amphotericin B", "Amphotericin B"],
   ["Ampicillin", "Ampicillin"],
   ["Ampicillin-Sulbactam", "Unasyn"],
-  ["Amoxicillin-Clavulonate", "Augmentin"],
-  ["Cefixime", "Cefixime"],
   ["Bactrim", "Bactrim"],
+  ["Cefixime", "Cefixime"],
+  ["Ceftazidime", "Ceftazidime"],
+  ["Cefoperazone-Sulbactam", "Sulperazone"],
+  ["Colistin", "Colistin"],
+  ["Ertapenem", "Ertapenem"],
   ["Ethambutol", "Ethambutol"],
-  ["Pyrazinamide", "Pyrazinamide"],
-  ["Acyclovir", "Acyclovir"],
-  ["Oseltamivir", "Oseltamivir"],
   ["Fluconazole", "Fluconazole"],
-  ["Amphotericin B", "Amphotericin B"],
+  ["Meropenem", "Meropenem"],
+  ["Oseltamivir", "Oseltamivir"],
+  ["Piperacillin-Tazobactam", "Tazocin"],
+  ["Pyrazinamide", "Pyrazinamide"],
+  ["Vancomycin", "Vancomycin"],
 ];
 
 function numberValue(selector) {
@@ -148,6 +148,11 @@ function numberValue(selector) {
 function setText(selector, value) {
   const element = $(selector);
   if (element) element.textContent = value;
+}
+
+function setHTML(selector, value) {
+  const element = $(selector);
+  if (element) element.innerHTML = value;
 }
 
 function round(value, digits = 1) {
@@ -195,17 +200,21 @@ function daysBetween(start, end) {
 function chooseTabletOption(minMg, maxMg, preparations, options = {}) {
   const allowHalf = options.allowHalf !== false;
   const step = allowHalf ? 0.5 : 1;
+  const maxDose = options.maxDose ?? maxMg;
+  const effectiveMax = Math.min(maxMg, maxDose);
   const optionsList = preparations.flatMap((tabletMg) => {
-    const lowestTabs = Math.max(step, Math.ceil(minMg / tabletMg / step) * step);
-    const highestTabs = Math.max(lowestTabs, Math.ceil(maxMg / tabletMg / step) * step);
+    const lowestTabs = step;
+    const highestTabs = Math.max(step, Math.floor(maxDose / tabletMg / step) * step);
     const choices = [];
 
     for (let tabs = lowestTabs; tabs <= highestTabs; tabs += step) {
       const dose = tabs * tabletMg;
-      const isInRange = dose >= minMg && dose <= maxMg;
+      const isInRange = dose >= minMg && dose <= effectiveMax;
       const isWholeTab = Number.isInteger(tabs);
-      const distanceFromMiddle = Math.abs(dose - (minMg + maxMg) / 2);
+      const distanceFromMiddle = Math.abs(dose - (minMg + effectiveMax) / 2);
+      const distanceFromCap = Math.abs(dose - effectiveMax);
       choices.push({ tabletMg, tabs, dose, isInRange, isWholeTab, distanceFromMiddle });
+      choices[choices.length - 1].distanceFromCap = distanceFromCap;
     }
 
     return choices;
@@ -214,6 +223,7 @@ function chooseTabletOption(minMg, maxMg, preparations, options = {}) {
   optionsList.sort((a, b) => {
     if (a.isInRange !== b.isInRange) return a.isInRange ? -1 : 1;
     if (a.isWholeTab !== b.isWholeTab) return a.isWholeTab ? -1 : 1;
+    if (!a.isInRange && a.distanceFromCap !== b.distanceFromCap) return a.distanceFromCap - b.distanceFromCap;
     if (a.tabs !== b.tabs) return a.tabs - b.tabs;
     return a.distanceFromMiddle - b.distanceFromMiddle;
   });
@@ -332,14 +342,14 @@ function calculateTbDose() {
   const embMax = roundDownToTens(weight * 20);
   const lfxDose = weight <= 45 ? 750 : 1000;
   const lfxTabs = weight <= 45 ? 1.5 : 2;
-  const amkDose = roundToTens(weight * 15);
+  const amkDose = Math.min(roundToTens(weight * 15), 1000);
 
-  setTbDrug("Isoniazid", inhMin, inhMax, [300], "inh");
-  setTbDrug("Rifampicin", rifMin, rifMax, [300, 450], "rif", { allowHalf: false });
-  setTbDrug("Pyrazinamide", pzaMin, pzaMax, [500, 1000], "pza");
-  setTbDrug("Ethambutol", embMin, embMax, [400, 500], "emb");
+  setTbDrug("Isoniazid", inhMin, inhMax, [300], "inh", { maxDose: 300 });
+  setTbDrug("Rifampicin", rifMin, rifMax, [300, 450], "rif", { allowHalf: false, maxDose: 600 });
+  setTbDrug("Pyrazinamide", pzaMin, pzaMax, [500, 1000], "pza", { maxDose: 2000 });
+  setTbDrug("Ethambutol", embMin, embMax, [400, 500], "emb", { maxDose: 1200 });
   setText("#lfxPrep", "500 mg");
-  setText("#lfxDose", `${lfxDose} mg or ${formatTabs(lfxTabs)} tab/day`);
+  setText("#lfxDose", `${Math.min(lfxDose, 1500)} mg or ${formatTabs(Math.min(lfxTabs, 3))} tab/day`);
   setText("#amkPrep", "500 mg/ 2 ml");
   setText("#amkDose", `Amikacin ${amkDose} mg IV OD`);
 }
@@ -348,7 +358,7 @@ function getCrClValue() {
   const age = numberValue("#crclAge");
   const weight = numberValue("#crclWeight");
   const scr = numberValue("#crclScr");
-  const sex = document.querySelector('input[name="crclSex"]:checked')?.value ?? "male";
+  const sex = $("#crclSex")?.value ?? "male";
 
   if (!age || !weight || !scr || age <= 0 || weight <= 0 || scr <= 0) return null;
 
@@ -380,7 +390,11 @@ function selectRenalDose(drugName) {
   }
 
   const bucket = renalBucket(crcl);
-  setText("#renalDoseResult", `${drugName}\nCrCl ${round(crcl, 1)} mL/min\n${drug[bucket]}`);
+  setText("#renalDoseResult", `${drugName} ${formatRenalDoseText(drug[bucket])}`);
+}
+
+function formatRenalDoseText(text) {
+  return text.replace(/\bq(\d+(?:-\d+)?)h\b/g, "q $1 h");
 }
 
 function calculateFibApri() {
@@ -388,7 +402,7 @@ function calculateFibApri() {
   const platelets = numberValue("#platelets");
   const ast = numberValue("#ast");
   const alt = numberValue("#alt");
-  const sex = document.querySelector('input[name="fibSex"]:checked')?.value ?? "male";
+  const sex = $("#fibSex")?.value ?? "male";
   const condition = document.querySelector('input[name="fibCondition"]:checked')?.value ?? "hbv";
   const astUln = sex === "male" ? 50 : 35;
 
@@ -458,14 +472,16 @@ function calculateBicarbonateDeficit() {
     setText("#bicarbDeficit", "-");
     return;
   }
-  setText("#bicarbDeficit", `${round(0.5 * weight * (target - current), 0)} mEq`);
+  const deficit = 0.5 * weight * (target - current);
+  const ampules = Math.ceil(deficit / 44.6);
+  setHTML("#bicarbDeficit", `${round(deficit, 0)} mEq or ${ampules} ampules of 7.5%NaHCO<sub>3</sub>`);
 }
 
 function calculateWaterDeficit() {
   const weight = numberValue("#waterWeight");
   const sodium = numberValue("#waterSodium");
   const target = numberValue("#targetSodium");
-  const sex = document.querySelector('input[name="waterSex"]:checked')?.value ?? "male";
+  const sex = $("#waterSex")?.value ?? "male";
   if (!weight || !sodium || !target || sodium <= target) {
     setText("#waterDeficit", "-");
     return;
@@ -518,9 +534,11 @@ function setupRenalButtons() {
 }
 
 function setupFastInputFlow() {
-  const textInputs = $$('input[type="number"], input[type="date"]');
+  const textInputs = $$('input[type="number"], input[type="date"], select');
 
   textInputs.forEach((input, index) => {
+    const isSelect = input.tagName === "SELECT";
+
     if (input.type === "number") {
       input.addEventListener("keydown", (event) => {
         const allowNegative = input.id === "warfarinPercentChange";
@@ -530,20 +548,23 @@ function setupFastInputFlow() {
       });
     }
 
-    input.addEventListener("click", () => {
-      input.value = "";
-      calculateAll();
-    });
+    if (!isSelect) {
+      input.addEventListener("click", () => {
+        input.value = "";
+        calculateAll();
+      });
+    }
 
     input.addEventListener("keydown", (event) => {
       if (!["Enter", "ArrowRight", "ArrowLeft"].includes(event.key)) return;
+      if (isSelect && event.key === "Enter") return;
       event.preventDefault();
 
       const targetIndex = event.key === "ArrowLeft" ? index - 1 : index + 1;
       const targetInput = textInputs[targetIndex];
       if (targetInput) {
         targetInput.focus();
-        targetInput.value = "";
+        if (targetInput.tagName !== "SELECT") targetInput.value = "";
         calculateAll();
       } else if (event.key === "Enter") {
         calculateAll();

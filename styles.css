@@ -8,7 +8,8 @@
   --muted: #a8a8a8;
   --line: #2c2c2c;
   --line-strong: #484848;
-  --accent: #f2f2f2;
+  --section: #f0d6a8;
+  --section-soft: rgba(240, 214, 168, 0.13);
   --shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
 }
 
@@ -120,8 +121,8 @@ h3 {
 
 .tab-button.active,
 .drug-buttons button.active {
-  border-color: #f4f4f4;
-  background: #f4f4f4;
+  border-color: var(--section);
+  background: var(--section);
   color: #050505;
 }
 
@@ -131,6 +132,36 @@ h3 {
 
 .tab-page.active {
   display: block;
+}
+
+.due-date-theme {
+  --section: #f3d5a6;
+  --section-soft: rgba(243, 213, 166, 0.14);
+}
+
+.warfarin-theme {
+  --section: #f1b8b8;
+  --section-soft: rgba(241, 184, 184, 0.14);
+}
+
+.tb-theme {
+  --section: #efd08a;
+  --section-soft: rgba(239, 208, 138, 0.14);
+}
+
+.crcl-theme {
+  --section: #d9c2f0;
+  --section-soft: rgba(217, 194, 240, 0.13);
+}
+
+.electrolyte-theme {
+  --section: #f1e3a3;
+  --section-soft: rgba(241, 227, 163, 0.13);
+}
+
+.fib-theme {
+  --section: #e8b7d6;
+  --section-soft: rgba(232, 183, 214, 0.13);
 }
 
 .dashboard {
@@ -150,7 +181,9 @@ h3 {
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: linear-gradient(180deg, var(--panel) 0, #0d0d0d 100%);
+  background:
+    linear-gradient(180deg, var(--section-soft) 0, rgba(10, 10, 10, 0) 42%),
+    linear-gradient(180deg, var(--panel) 0, #0d0d0d 100%);
   box-shadow: var(--shadow);
 }
 
@@ -175,7 +208,8 @@ fieldset {
   font-weight: 650;
 }
 
-input {
+input,
+select {
   width: 100%;
   min-height: 42px;
   border: 1px solid var(--line-strong);
@@ -186,9 +220,18 @@ input {
   padding: 9px 11px;
 }
 
-input:focus {
-  border-color: #f5f5f5;
-  outline: 3px solid rgba(255, 255, 255, 0.13);
+select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--section) 50%), linear-gradient(135deg, var(--section) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 18px, calc(100% - 12px) 18px;
+  background-repeat: no-repeat;
+  background-size: 6px 6px, 6px 6px;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--section);
+  outline: 3px solid color-mix(in srgb, var(--section) 22%, transparent);
 }
 
 .two-column,
@@ -258,7 +301,7 @@ input:focus {
 .drug-box {
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: #0a0a0a;
+  background: linear-gradient(180deg, var(--section-soft), #0a0a0a 56%);
   padding: 12px;
 }
 
@@ -269,7 +312,7 @@ input:focus {
 .result-box span,
 .drug-box span {
   display: block;
-  color: var(--muted);
+  color: var(--section);
   font-size: 0.86rem;
   font-weight: 750;
   text-transform: uppercase;
@@ -312,6 +355,17 @@ input:focus {
   gap: 8px;
 }
 
+.beta-tag {
+  align-self: flex-start;
+  border: 1px solid var(--section);
+  border-radius: 999px;
+  color: var(--section);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
 .interpretation {
   margin: 8px 0 0;
   color: var(--muted);
@@ -328,7 +382,7 @@ input:focus {
 
 .warning-note {
   color: #f1f1f1;
-  border-left: 3px solid #f1f1f1;
+  border-left: 3px solid var(--section);
   padding-left: 10px;
 }
 
