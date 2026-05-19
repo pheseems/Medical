@@ -6,29 +6,37 @@
     <title>Medical Calculator</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <header class="app-header">
-      <div>
-        <h1>Medical Calculator</h1>
-        <p class="subtitle">Fast bedside calculations for OPD and ward workflow. Verify all outputs before clinical use.</p>
-      </div>
-      <div class="header-actions">
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch theme">☀️</button>
-        <div class="privacy-note">Runs locally in your browser. No login, no server, no cloud storage.</div>
-      </div>
-    </header>
+  <body data-section="due-date">
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand-block">
+          <div class="app-icon" aria-hidden="true">🩺</div>
+          <div>
+            <h1>Medical Calculator</h1>
+            <p class="subtitle">Fast bedside calculations for OPD and ward workflow.</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="hero-badges" aria-label="App privacy badges">
+            <span class="hero-badge">Local only</span>
+            <span class="hero-badge">No login</span>
+            <span class="hero-badge danger">No cloud storage</span>
+          </div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch theme">☀️</button>
+        </div>
+      </header>
 
-    <nav class="section-tabs" aria-label="Calculator sections">
-      <button class="tab-button active" data-tab="due-date" type="button">📅 Due date</button>
-      <button class="tab-button" data-tab="warfarin" type="button">🩸 Warfarin</button>
-      <button class="tab-button" data-tab="anti-tb" type="button">💊 Anti-TB</button>
-      <button class="tab-button" data-tab="crcl" type="button">🧪 Creatinine clearance</button>
-      <button class="tab-button" data-tab="electrolyte" type="button">⚡ Electrolyte</button>
-      <button class="tab-button" data-tab="fib" type="button">🧬 FIB-4 & APRI</button>
-      <button class="tab-button" data-tab="note" type="button">📝 Note</button>
-    </nav>
+      <nav class="section-tabs" aria-label="Calculator sections">
+        <button class="tab-button active" data-tab="due-date" type="button"><span>📅</span> Due date</button>
+        <button class="tab-button" data-tab="warfarin" type="button"><span>🩸</span> Warfarin</button>
+        <button class="tab-button" data-tab="anti-tb" type="button"><span>🫁</span> Anti-TB</button>
+        <button class="tab-button" data-tab="crcl" type="button"><span>🧪</span> Creatinine clearance</button>
+        <button class="tab-button" data-tab="electrolyte" type="button"><span>💧</span> Electrolyte</button>
+        <button class="tab-button" data-tab="fib" type="button"><span>🧬</span> FIB-4 & APRI</button>
+        <button class="tab-button" data-tab="note" type="button"><span>📝</span> Note</button>
+      </nav>
 
-    <main>
+      <main>
       <section class="tab-page active due-date-theme" id="due-date" aria-labelledby="due-date-tab">
         <div class="dashboard">
           <section class="calculator-card" id="calendar-card">
@@ -124,7 +132,7 @@
       <section class="tab-page crcl-theme" id="crcl">
         <div class="dashboard">
           <section class="calculator-card" id="crcl-card">
-            <div class="card-header"><h2>Creatinine Clearance</h2></div>
+            <div class="card-header"><h2><span class="card-icon">🧪</span> Creatinine Clearance</h2><button class="ghost-button" type="button" title="Cockcroft-Gault: ((140 - age) x weight x sex factor) / (72 x SCr)">Formula</button></div>
             <div class="three-column">
               <label>Age <input id="crclAge" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="65" /></label>
               <label>Weight (kg) <input id="crclWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
@@ -136,11 +144,12 @@
                 <option value="female">Female</option>
               </select>
             </label>
-            <div class="result-box wide"><span>Estimated Creatinine Clearance</span><strong id="crclResult">-</strong></div>
+            <div class="result-box wide crcl-result"><span>Estimated Creatinine Clearance</span><strong id="crclResult">-</strong></div>
+            <p class="clinical-note"><strong>Clinical note:</strong> This is an estimate. Verify outputs before clinical use. Consider patient factors, trends, and drug-specific renal adjustment.</p>
           </section>
 
           <section class="calculator-card wide-card" id="renal-dose-card">
-            <div class="card-header"><h2>Renal Dose of Antibiotics</h2><span class="beta-tag">Beta</span></div>
+            <div class="card-header"><h2>Renal Dose of Antibiotics <span class="beta-tag">Beta</span></h2><button class="ghost-button" type="button" title="Stanford Health Care Antimicrobial Dosing Reference Guide, February 2026">Reference</button></div>
             <div class="renal-mode-buttons" aria-label="Renal support">
               <button class="renal-mode-button active" data-renal-mode="crcl" type="button">Default</button>
               <button class="renal-mode-button" data-renal-mode="ihd" type="button">Hemodialysis</button>
@@ -233,7 +242,7 @@
                 <option value="female">Female</option>
               </select>
             </label>
-            <fieldset class="segmented">
+            <fieldset class="segmented condition-buttons">
               <legend>Condition</legend>
               <label><input type="radio" name="fibCondition" value="hbv" checked /> HBV</label>
               <label><input type="radio" name="fibCondition" value="hcv" /> HCV</label>
@@ -262,13 +271,23 @@
           </section>
         </div>
       </section>
-    </main>
+      </main>
 
-    <footer class="app-footer">
-      <p>Created by Pitchakorn Puangpornsri, MD. If there is any problem, please contact me directly.</p>
-      <p>Clinical note: this app is a calculation aid only. Verify all outputs before use in patient care.</p>
-      <p>References: <a href="https://idmp.ucsf.edu/adult-antimicrobial-dosing-non-dialysis">UCSF IDMP antimicrobial dosing</a>, <a href="https://www.cdc.gov/tb/hcp/treatment/tuberculosis-disease.html">CDC TB treatment</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/fib-4">Hepatitis C Online FIB-4</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/apri">Hepatitis C Online APRI</a></p>
-    </footer>
+      <footer class="app-footer">
+        <div class="footer-item">
+          <span class="footer-icon">🛡️</span>
+          <p><strong>Clinical safety note</strong><br />This app is a calculation aid only. Verify all outputs before use in patient care.</p>
+        </div>
+        <div class="footer-item">
+          <span class="footer-icon">👨‍⚕️</span>
+          <p><strong>Created by Pitchakorn Puangpornsri, MD.</strong><br />If there is any problem, please contact me directly.</p>
+        </div>
+        <div class="footer-item">
+          <span class="footer-icon">📚</span>
+          <p><strong>References</strong><br /><a href="https://idmp.ucsf.edu/adult-antimicrobial-dosing-non-dialysis">UCSF IDMP antimicrobial dosing</a>, <a href="https://www.cdc.gov/tb/hcp/treatment/tuberculosis-disease.html">CDC TB treatment</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/fib-4">Hepatitis C Online FIB-4</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/apri">Hepatitis C Online APRI</a></p>
+        </div>
+      </footer>
+    </div>
 
     <script src="app.js"></script>
   </body>
