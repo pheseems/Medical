@@ -1,144 +1,142 @@
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-const renalDoseTable = {
-  "Ceftazidime": {
-    gt50: "1-2 g IV q8h",
-    crcl30: "1-2 g IV q12h",
-    crcl10: "1 g IV q24h",
-    lt10: "500 mg-1 g IV q24-48h",
+const renalDoseEntries = [
+  {
+    name: "Acyclovir IV",
+    rows: [
+      { label: "General treatment", crcl: [[50, Infinity, "5 mg/kg IV q8h"], [25, 50, "5 mg/kg IV q12h"], [10, 25, "5 mg/kg IV q24h"], [-Infinity, 10, "2.5 mg/kg IV q24h"]], ihd: "2.5 mg/kg IV q24h", crrt: "5-10 mg/kg IV q12h" },
+      { label: "Severe treatment", crcl: [[50, Infinity, "10 mg/kg IV q8h"], [25, 50, "10 mg/kg IV q12h"], [10, 25, "10 mg/kg IV q24h"], [-Infinity, 10, "5 mg/kg IV q24h"]], ihd: "5 mg/kg IV q24h", crrt: "10 mg/kg IV q12h" },
+    ],
   },
-  "Tazocin": {
-    gt50: "4.5 g IV q6-8h",
-    crcl30: "3.375 g IV q6h or 4.5 g IV q8h",
-    crcl10: "2.25 g IV q6-8h",
-    lt10: "2.25 g IV q8-12h",
+  {
+    name: "Acyclovir PO",
+    rows: [
+      { label: "Prophylaxis", crcl: [[50, Infinity, "400 mg PO BID"], [25, 50, "400 mg PO BID"], [10, 25, "200 mg PO BID"], [-Infinity, 10, "200 mg PO daily"]], ihd: "200 mg PO daily", crrt: "No data" },
+      { label: "Mucocutaneous HSV", crcl: [[50, Infinity, "400 mg PO q8h or 200 mg 5x daily"], [25, 50, "200 mg PO q8h"], [10, 25, "200 mg PO q12h"], [-Infinity, 10, "200 mg PO q12h"]], ihd: "200 mg PO q12h", crrt: "No data" },
+      { label: "VZV", crcl: [[50, Infinity, "800 mg PO q4h or 5x daily"], [25, 50, "800 mg PO q8h"], [10, 25, "800 mg PO q12h"], [-Infinity, 10, "800 mg PO q12h"]], ihd: "800 mg PO q12h", crrt: "No data" },
+    ],
   },
-  "Meropenem": {
-    gt50: "1 g IV q8h",
-    crcl30: "1 g IV q12h",
-    crcl10: "500 mg IV q12h",
-    lt10: "500 mg IV q24h",
+  {
+    name: "Amoxicillin",
+    rows: [
+      { label: "1,000 mg regimen", crcl: [[30, Infinity, "1,000 mg PO q8h"], [10, 30, "1,000 mg PO q12h"], [-Infinity, 10, "500 mg PO q12h"]], ihd: "500 mg PO q12h", crrt: "No data" },
+      { label: "875-1,000 mg regimen", crcl: [[30, Infinity, "875-1,000 mg PO q12h"], [10, 30, "500 mg PO q12h"], [-Infinity, 10, "500 mg PO q12-24h"]], ihd: "500 mg PO q12-24h", crrt: "No data" },
+      { label: "500 mg regimen", crcl: [[30, Infinity, "500 mg PO q8h"], [10, 30, "500 mg PO q12h"], [-Infinity, 10, "500 mg PO q12-24h"]], ihd: "500 mg PO q12-24h", crrt: "No data" },
+    ],
   },
-  "Ertapenem": {
-    gt50: "1 g IV q24h",
-    crcl30: "1 g IV q24h",
-    crcl10: "500 mg IV q24h",
-    lt10: "500 mg IV q24h",
+  {
+    name: "Amoxicillin/clavulanate PO",
+    rows: [
+      { label: "Usual/CAP", crcl: [[30, Infinity, "500 mg PO q8h or 875 mg PO q12h"], [10, 30, "500 mg PO q12h"], [-Infinity, 10, "500 mg PO q24h"]], ihd: "500 mg PO q24h; dose after dialysis for q24h regimen", crrt: "No data" },
+      { label: "IAI/GNR step-down", crcl: [[30, Infinity, "Up to 875 mg PO q8h"], [10, 30, "Up to 875 mg PO q12h"], [-Infinity, 10, "Up to 875 mg PO q24h"]], ihd: "500 mg PO q24h; dose after dialysis for q24h regimen", crrt: "No data" },
+    ],
   },
-  "Colistin": {
-    gt50: "Use loading dose, then adjust by CrCl and target indication",
-    crcl30: "Use renal protocol or pharmacist dosing",
-    crcl10: "Use renal protocol or pharmacist dosing",
-    lt10: "Use renal protocol or pharmacist dosing",
+  {
+    name: "Ampicillin",
+    rows: [
+      { label: "Mild/uncomplicated", crcl: [[50, Infinity, "1-2 g IV q6h"], [30, 50, "1-2 g IV q8h"], [15, 30, "1-2 g IV q12h"], [-Infinity, 15, "1-2 g IV q24h"]], ihd: "1-2 g IV q24h", crrt: "2 g IV q8-12h" },
+      { label: "Meningitis/endovascular/PJI", crcl: [[50, Infinity, "2 g IV q4h"], [30, 50, "2 g IV q6h"], [15, 30, "2 g IV q8h"], [-Infinity, 15, "2 g IV q12h"]], ihd: "2 g IV q12h", crrt: "2 g IV q6-8h" },
+    ],
   },
-  "Sulperazone": {
-    gt50: "Usually no renal adjustment; monitor sulbactam exposure",
-    crcl30: "Usually no renal adjustment; consider interval adjustment in severe renal dysfunction",
-    crcl10: "Review local guideline/pharmacist",
-    lt10: "Review local guideline/pharmacist",
+  {
+    name: "Ampicillin/sulbactam",
+    rows: [
+      { label: "Mild/uncomplicated", crcl: [[30, Infinity, "1.5 g IV q6h"], [15, 30, "1.5 g IV q12h"], [-Infinity, 15, "1.5 g IV q24h"]], ihd: "1.5 g IV q24h", crrt: "3 g IV q12h" },
+      { label: "Systemic", crcl: [[30, Infinity, "3 g IV q6h"], [15, 30, "3 g IV q12h"], [-Infinity, 15, "3 g IV q24h"]], ihd: "3 g IV q24h", crrt: "3 g IV q8h" },
+      { label: "Acinetobacter baumannii", crcl: [[30, Infinity, "3 g IV q4h"], [15, 30, "3 g IV q8h"], [-Infinity, 15, "3 g IV q12h"]], ihd: "3 g IV q12h", crrt: "3 g IV q6h" },
+    ],
   },
-  "Amikacin": {
-    gt50: "15-20 mg/kg IV, extend interval by level",
-    crcl30: "15 mg/kg IV, extend interval by level",
-    crcl10: "Dose by level; avoid routine fixed interval",
-    lt10: "Dose by level; specialist/pharmacist dosing",
+  { name: "Azithromycin IV/PO", rows: [{ label: "Dose", crcl: [[-Infinity, Infinity, "500 mg IV/PO q24h"]], ihd: "No change", crrt: "No change" }] },
+  {
+    name: "Cefazolin",
+    rows: [
+      { label: "Mild", crcl: [[30, Infinity, "1 g IV q8h"], [10, 30, "1 g IV q12h"], [-Infinity, 10, "1 g IV q24h"]], ihd: "1 g IV q24h; dose after HD on HD days. Alt: 2g/2g/3g IV post-HD only", crrt: "2 g IV q12h" },
+      { label: "Moderate/severe", crcl: [[30, Infinity, "2 g IV q8h"], [10, 30, "2 g IV q12h"], [-Infinity, 10, "2 g IV q24h"]], ihd: "1 g IV q24h; dose after HD on HD days. Alt: 2g/2g/3g IV post-HD only", crrt: "2 g IV q12h" },
+    ],
   },
-  "Vancomycin": {
-    gt50: "15-20 mg/kg IV q8-12h; adjust by AUC/trough",
-    crcl30: "15-20 mg/kg IV q24h; adjust by level",
-    crcl10: "Dose by level",
-    lt10: "Dose by level",
+  {
+    name: "Cefepime",
+    rows: [
+      { label: "General", crcl: [[60, Infinity, "1 g IV q8h or 2 g IV q12h"], [30, 60, "1 g IV q12h or 2 g IV q24h"], [10, 30, "1 g IV q24h"], [-Infinity, 10, "500 mg IV q24h"]], ihd: "0.5-1 g IV q24h; dose after HD on HD days. Alt: 2 g IV post-HD only", crrt: "2 g IV load, then 1 g IV q8h (4-hour infusion)" },
+      { label: "Pulmonary/neutropenic fever/CNS/Pseudomonas/severe", crcl: [[60, Infinity, "2 g IV q8h"], [30, 60, "2 g IV q12h"], [10, 30, "1 g IV q12h"], [-Infinity, 10, "1 g IV q24h"]], ihd: "0.5-1 g IV q24h; dose after HD on HD days. Alt: 2 g IV post-HD only", crrt: "2 g IV load, then 1 g IV q8h (4-hour infusion)" },
+    ],
   },
-  "Ampicillin": {
-    gt50: "1-2 g IV q4-6h",
-    crcl30: "1-2 g IV q6-8h",
-    crcl10: "1-2 g IV q8-12h",
-    lt10: "1-2 g IV q12-24h",
+  { name: "Ceftazidime", rows: [{ label: "Dose", crcl: [[50, Infinity, "1-2 g IV q8h; severe 2 g IV q8h"], [30, 50, "1-2 g IV q12h"], [16, 30, "1-2 g IV q24h"], [6, 16, "0.5-1 g IV q24h"], [-Infinity, 6, "0.5 g IV q24h"]], ihd: "0.5-1 g IV q24h; dose after HD on HD days. Alt: 1-2 g IV q48-72h or 1 g IV post-HD only TIW", crrt: "2 g IV load, then 1 g IV q8h or 2 g IV q12h" }] },
+  {
+    name: "Ciprofloxacin IV/PO",
+    rows: [
+      { label: "General infections", crcl: [[50, Infinity, "400 mg IV q12h or 500 mg PO q12h"], [30, 50, "Same"], [-Infinity, 30, "400 mg IV q24h or 500 mg PO q24h"]], ihd: "200-400 mg IV q24h or 250-500 mg PO q24h; dose after HD on HD days", crrt: "400 mg IV q12h or 500 mg PO q12h" },
+      { label: "Pseudomonas/severe", crcl: [[50, Infinity, "400 mg IV q8h or 750 mg PO q12h"], [30, 50, "400 mg IV q8-12h or 500 mg PO q12h"], [-Infinity, 30, "400 mg IV q24h or 500 mg PO q24h"]], ihd: "200-400 mg IV q24h or 250-500 mg PO q24h; dose after HD on HD days", crrt: "400 mg IV q12h or 500 mg PO q12h; severe A. baumannii/P. aeruginosa: 400 mg IV q8-12h" },
+    ],
   },
-  "Unasyn": {
-    gt50: "1.5-3 g IV q6h",
-    crcl30: "1.5-3 g IV q8-12h",
-    crcl10: "1.5-3 g IV q12h",
-    lt10: "1.5-3 g IV q24h",
+  { name: "Ertapenem", rows: [{ label: "Dose", crcl: [[30, Infinity, "1 g IV q24h"], [-Infinity, 30, "500 mg IV q24h"]], ihd: "500 mg IV q24h; dose after HD on HD days. Alt: 500-1000 mg IV post-HD", crrt: "1 g IV q24h" }] },
+  { name: "Ethambutol", rows: [{ label: "Dose", crcl: [[30, Infinity, "15-25 mg/kg PO daily"], [-Infinity, 30, "15-25 mg/kg PO 3 times per week"]], ihd: "15-25 mg/kg PO 3 times per week post-HD; administer after HD only", crrt: "15-25 mg/kg PO 3 times per week" }] },
+  {
+    name: "Fluconazole IV/PO",
+    rows: [
+      { label: "Oropharyngeal candidiasis/Candida peritonitis", crcl: [[50, Infinity, "Load 200 mg x1, then 100-200 mg q24h"], [-Infinity, 50, "Load 200 mg x1, then 100 mg q24h"]], ihd: "Load 200 mg x1, then 200 mg q48h; dose after HD on HD days", crrt: "Load 400 mg x1, then 100-200 mg q24h" },
+      { label: "Esophageal/osteoarticular/pyelonephritis", crcl: [[50, Infinity, "400 mg or 6 mg/kg q24h"], [-Infinity, 50, "400 mg or 6 mg/kg x1, then 200 mg or 3 mg/kg q24h"]], ihd: "Load 400 mg or 6 mg/kg x1, then 400 mg post-HD or 200 mg q24h; dose after HD on HD days", crrt: "Load 800 mg or 12 mg/kg x1, then 400 mg or 6 mg/kg q24h" },
+      { label: "Severe candidiasis", crcl: [[50, Infinity, "Load 800 mg or 12 mg/kg x1, then 400-800 mg IV/PO q24h"], [-Infinity, 50, "Load 800 mg or 12 mg/kg x1, then 200-400 mg IV/PO q24h"]], ihd: "Load 800 mg x1, then 400-800 mg post-HD or 200-400 mg q24h; dose after HD on HD days", crrt: "Load 800-1200 mg x1, then 400-800 mg IV/PO daily; consider higher dosing per guide" },
+    ],
   },
-  "Augmentin": {
-    gt50: "Usual dose",
-    crcl30: "Usual dose q12h; avoid 875 mg tab if CrCl <30",
-    crcl10: "500/125 mg PO q24h",
-    lt10: "500/125 mg PO q24h",
+  {
+    name: "Ganciclovir",
+    rows: [
+      { label: "CMV induction", crcl: [[70, Infinity, "5 mg/kg IV q12h"], [50, 70, "2.5 mg/kg IV q12h"], [25, 50, "2.5 mg/kg IV q24h"], [10, 25, "1.25 mg/kg IV q24h"], [-Infinity, 10, "1.25 mg/kg IV 3x/week"]], ihd: "1.25 mg/kg IV 3x/week; give after HD on HD days", crrt: "2.5 mg/kg IV q12h" },
+      { label: "CMV maintenance", crcl: [[70, Infinity, "5 mg/kg IV q24h"], [50, 70, "2.5 mg/kg IV q24h"], [25, 50, "1.25 mg/kg IV q24h"], [10, 25, "0.625 mg/kg IV q24h"], [-Infinity, 10, "0.625 mg/kg IV 3x/week"]], ihd: "0.625 mg/kg IV 3x/week; give after HD on HD days", crrt: "2.5 mg/kg IV q24h" },
+    ],
   },
-  "Cefixime": {
-    gt50: "400 mg PO daily",
-    crcl30: "400 mg PO daily",
-    crcl10: "200 mg PO daily",
-    lt10: "200 mg PO daily",
+  {
+    name: "Imipenem/cilastatin",
+    rows: [
+      { label: "General", crcl: [[60, Infinity, "500 mg IV q6h or 1 g IV q8h"], [30, 60, "500 mg IV q8h"], [15, 30, "500 mg IV q12h"], [-Infinity, 15, "Not recommended unless dialysis starts within 48 h"]], ihd: "250-500 mg IV q12h", crrt: "1 g load, then 500 mg IV q6h" },
+      { label: "NTM", crcl: [[60, Infinity, "1,000 mg IV q12h"], [30, 60, "750 mg IV q12h"], [15, 30, "500 mg IV q12h"], [-Infinity, 15, "Not recommended unless dialysis starts within 48 h"]], ihd: "250-500 mg IV q12h", crrt: "1 g load, then 500 mg IV q6h" },
+    ],
   },
-  "Bactrim": {
-    gt50: "Usual dose",
-    crcl30: "Give 50% of usual dose",
-    crcl10: "Avoid if possible or specialist dosing",
-    lt10: "Avoid if possible",
+  {
+    name: "Levofloxacin IV/PO",
+    rows: [
+      { label: "Cystitis", crcl: [[50, Infinity, "250 mg q24h"], [-Infinity, 50, "No change"]], ihd: "No change; give after HD on HD days", crrt: "No change" },
+      { label: "Mild-moderate DFI/prostatitis", crcl: [[50, Infinity, "500 mg q24h"], [20, 50, "500 mg x1, then 250 mg q24h"], [-Infinity, 20, "500 mg x1, then 250 mg q48h"]], ihd: "Use CrCl <20 dosing; dose q48h after HD on HD days", crrt: "500 mg x1, then 250 mg q24h or 500 mg q48h" },
+      { label: "Severe/PNA/cUTI/osteomyelitis/PJI/Pseudomonas/Stenotrophomonas", crcl: [[50, Infinity, "750 mg q24h"], [20, 50, "750 mg q48h"], [-Infinity, 20, "750 mg x1, then 500 mg q48h"]], ihd: "Use CrCl <20 dosing; dose q48h after HD on HD days", crrt: "750 mg x1, then 500 mg q48h or 750 mg q48h" },
+    ],
   },
-  "Ethambutol": {
-    gt50: "15-20 mg/kg PO daily",
-    crcl30: "15-25 mg/kg PO 3 times/week",
-    crcl10: "15-25 mg/kg PO 3 times/week",
-    lt10: "15-25 mg/kg PO 3 times/week",
+  {
+    name: "Meropenem",
+    rows: [
+      { label: "Usual dose (FN/PNA/Pseudomonas)", crcl: [[50, Infinity, "1 g IV q8h"], [26, 50, "1 g IV q12h"], [10, 26, "0.5 g IV q12h"], [-Infinity, 10, "0.5 g IV q24h"]], ihd: "500 mg IV q24h; dose after HD on HD days", crrt: "1 g IV q8h" },
+      { label: "CF/CNS infections", crcl: [[50, Infinity, "2 g IV q8h"], [26, 50, "2 g IV q12h"], [10, 26, "1 g IV q12h"], [-Infinity, 10, "1 g IV q24h"]], ihd: "1 g IV q24h; dose after HD on HD days", crrt: "2 g IV q12h" },
+    ],
   },
-  "Pyrazinamide": {
-    gt50: "20-30 mg/kg PO daily",
-    crcl30: "25-35 mg/kg PO 3 times/week",
-    crcl10: "25-35 mg/kg PO 3 times/week",
-    lt10: "25-35 mg/kg PO 3 times/week",
+  {
+    name: "Oseltamivir",
+    rows: [
+      { label: "Prophylaxis", crcl: [[60, Infinity, "75 mg PO q24h"], [30, 60, "30 mg PO q24h"], [10, 30, "30 mg PO q48h"], [-Infinity, 10, "30 mg once weekly"]], ihd: "30 mg PO x1, then 30 mg after every other HD session", crrt: "75 mg PO q24h" },
+      { label: "Treatment", crcl: [[60, Infinity, "75 mg PO q12h"], [30, 60, "75 mg x1, then 30 mg PO q12h"], [10, 30, "30 mg PO q24h"], [-Infinity, 10, "30 mg every other day"]], ihd: "30 mg PO x1, then 30 mg post-HD only", crrt: "75 mg PO q12h" },
+    ],
   },
-  "Acyclovir": {
-    gt50: "5-10 mg/kg IV q8h",
-    crcl30: "5-10 mg/kg IV q12h",
-    crcl10: "5-10 mg/kg IV q24h",
-    lt10: "2.5-5 mg/kg IV q24h",
+  { name: "Penicillin G", rows: [{ label: "Dose", crcl: [[50, Infinity, "2-4 million units IV q4h"], [10, 50, "2-3 million units IV q4h"], [-Infinity, 10, "1-2 million units IV q6h"]], ihd: "Mild: 0.5-1 million units IV q4-6h or 1-2 million units IV q8-12h; severe: 2 million units IV q4-6h or 4 million units IV q8-12h", crrt: "4 million units IV q4-6h" }] },
+  {
+    name: "Piperacillin/tazobactam",
+    rows: [
+      { label: "Extended infusion: general/CF/Pseudomonas/nosocomial PNA", crcl: [[40, Infinity, "3.375-4.5 g IV q8h over 4h; SDD: 4.5 g IV q8h"], [20, 40, "3.375-4.5 g IV q8h over 4h; SDD: 4.5 g IV q8h"], [-Infinity, 20, "3.375 g IV q12h over 4h"]], ihd: "General: 2.25 g IV q12h; severe: 3.375 g IV q12h over 4h; alt 2.25 g IV q8h", crrt: "3.375 g IV q6h over 30 min or 3.375-4.5 g IV q8h over 4h" },
+      { label: "Intermittent: general", crcl: [[40, Infinity, "3.375 g IV q6h"], [20, 40, "2.25 g IV q6h"], [-Infinity, 20, "2.25 g IV q8h"]], ihd: "General: 2.25 g IV q12h; severe: 3.375 g IV q12h over 4h; alt 2.25 g IV q8h", crrt: "3.375 g IV q6h over 30 min or 3.375-4.5 g IV q8h over 4h" },
+      { label: "Intermittent: severe/sepsis/CF/nosocomial PNA", crcl: [[40, Infinity, "4.5 g IV q6h"], [20, 40, "3.375 g IV q6h"], [-Infinity, 20, "2.25 g IV q6h"]], ihd: "General: 2.25 g IV q12h; severe: 3.375 g IV q12h over 4h; alt 2.25 g IV q8h", crrt: "3.375 g IV q6h over 30 min or 3.375-4.5 g IV q8h over 4h" },
+    ],
   },
-  "Oseltamivir": {
-    gt50: "75 mg PO BID",
-    crcl30: "30 mg PO BID",
-    crcl10: "30 mg PO daily",
-    lt10: "30 mg PO once, then discuss if not dialysis",
+  { name: "Pyrazinamide", rows: [{ label: "Dose", crcl: [[30, Infinity, "25 mg/kg PO q24h; max 2,000 mg/day"], [-Infinity, 30, "25 mg/kg PO 3 times per week"]], ihd: "25 mg/kg PO 3 times per week; administer after HD on HD days", crrt: "No data" }] },
+  {
+    name: "TMP/SMX IV/PO",
+    rows: [
+      { label: "Uncomplicated cystitis", crcl: [[30, Infinity, "1 DS tab PO BID"], [15, 30, "50% of recommended dose"], [-Infinity, 15, "Use not recommended; if needed, 25-50% of usual dose"]], ihd: "25-50% of usual dose; dose daily after HD on HD days", crrt: "5-10 mg/kg/day TMP divided q12h" },
+      { label: "SSTI", crcl: [[30, Infinity, "1-2 DS tabs PO BID"], [15, 30, "50% of recommended dose"], [-Infinity, 15, "Use not recommended; if needed, 25-50% of usual dose"]], ihd: "25-50% of usual dose; dose daily after HD on HD days", crrt: "5-10 mg/kg/day TMP divided q12h" },
+      { label: "PJP/Stenotrophomonas", crcl: [[30, Infinity, "10-15 mg/kg/day TMP divided q8-12h"], [15, 30, "50% of recommended dose"], [-Infinity, 15, "5-7.5 mg/kg TMP q24h"]], ihd: "PJP/Stenotrophomonas: 5-7.5 mg/kg TMP q24h; alt 5-15 mg/kg TMP post-HD only", crrt: "10-15 mg/kg/day TMP divided q8-12h" },
+    ],
   },
-  "Fluconazole": {
-    gt50: "Usual loading dose, then usual maintenance dose",
-    crcl30: "Usual loading dose, then 50% maintenance dose",
-    crcl10: "Usual loading dose, then 50% maintenance dose",
-    lt10: "Usual loading dose, then 50% maintenance dose",
-  },
-  "Amphotericin B": {
-    gt50: "No renal dose adjustment; monitor nephrotoxicity",
-    crcl30: "No renal dose adjustment; monitor nephrotoxicity",
-    crcl10: "No renal dose adjustment; monitor nephrotoxicity",
-    lt10: "No renal dose adjustment; monitor nephrotoxicity",
-  },
-};
-
-const renalButtonLabels = [
-  ["Acyclovir", "Acyclovir"],
-  ["Amikacin", "Amikacin"],
-  ["Amoxicillin-Clavulonate", "Augmentin"],
-  ["Amphotericin B", "Amphotericin B"],
-  ["Ampicillin", "Ampicillin"],
-  ["Ampicillin-Sulbactam", "Unasyn"],
-  ["Bactrim", "Bactrim"],
-  ["Cefixime", "Cefixime"],
-  ["Ceftazidime", "Ceftazidime"],
-  ["Cefoperazone-Sulbactam", "Sulperazone"],
-  ["Colistin", "Colistin"],
-  ["Ertapenem", "Ertapenem"],
-  ["Ethambutol", "Ethambutol"],
-  ["Fluconazole", "Fluconazole"],
-  ["Meropenem", "Meropenem"],
-  ["Oseltamivir", "Oseltamivir"],
-  ["Piperacillin-Tazobactam", "Tazocin"],
-  ["Pyrazinamide", "Pyrazinamide"],
-  ["Vancomycin", "Vancomycin"],
 ];
+
+const renalDoseMap = Object.fromEntries(renalDoseEntries.map((entry) => [entry.name, entry]));
 
 function numberValue(selector) {
   const value = Number($(selector).value);
@@ -371,30 +369,44 @@ function calculateCrCl() {
   setText("#crclResult", crcl === null ? "-" : `${round(crcl, 1)} mL/min`);
 }
 
-function renalBucket(crcl) {
-  if (crcl > 50) return "gt50";
-  if (crcl >= 30) return "crcl30";
-  if (crcl >= 10) return "crcl10";
-  return "lt10";
-}
-
-function selectRenalDose(drugName) {
-  const crcl = getCrClValue();
-  const drug = renalDoseTable[drugName];
-
-  $$("#renalDrugButtons button").forEach((button) => button.classList.toggle("active", button.dataset.drug === drugName));
-
-  if (crcl === null) {
-    setText("#renalDoseResult", "Enter age, weight, SCr, and sex first.");
-    return;
-  }
-
-  const bucket = renalBucket(crcl);
-  setText("#renalDoseResult", `${drugName} ${formatRenalDoseText(drug[bucket])}`);
+function doseForCrCl(row, crcl) {
+  const match = row.crcl.find(([min, max]) => crcl >= min && crcl < max);
+  return match ? match[2] : "No data";
 }
 
 function formatRenalDoseText(text) {
-  return text.replace(/\bq(\d+(?:-\d+)?)h\b/g, "q $1 h");
+  return text.replace(/\bq(\d+(?:-\d+)?)h\b/gi, "q $1 h").replace(/Q(\d+)H/g, "q$1h");
+}
+
+function getRenalMode() {
+  return document.querySelector(".renal-mode-button.active")?.dataset.renalMode ?? "crcl";
+}
+
+function renderRenalDose() {
+  const drugName = $("#renalAntibiotic")?.value ?? "";
+  const mode = getRenalMode();
+  const drug = renalDoseMap[drugName];
+
+  if (!drug) {
+    setText("#renalDoseTitle", "Select antibiotic");
+    setHTML("#renalDoseResult", "-");
+    return;
+  }
+
+  if (mode === "crcl" && getCrClValue() === null) {
+    setText("#renalDoseTitle", drugName);
+    setHTML("#renalDoseResult", "Enter age, weight, SCr, and sex first, or choose HD/CRRT.");
+    return;
+  }
+
+  const crcl = getCrClValue();
+  const rows = drug.rows.map((row) => {
+    const dose = mode === "ihd" ? row.ihd : mode === "crrt" ? row.crrt : doseForCrCl(row, crcl);
+    return `<tr><td>${row.label}</td><td>${formatRenalDoseText(dose)}</td></tr>`;
+  }).join("");
+
+  setText("#renalDoseTitle", drugName);
+  setHTML("#renalDoseResult", `<table class="renal-dose-table"><tbody>${rows}</tbody></table>`);
 }
 
 function calculateFibApri() {
@@ -498,6 +510,7 @@ function calculateAll() {
   calculateWarfarinDoseChange();
   calculateTbDose();
   calculateCrCl();
+  renderRenalDose();
   calculateFibApri();
   calculateCalcium();
   calculateSodium();
@@ -517,19 +530,85 @@ function setupTabs() {
       const target = button.dataset.tab;
       $$(".tab-button").forEach((item) => item.classList.toggle("active", item === button));
       $$(".tab-page").forEach((page) => page.classList.toggle("active", page.id === target));
+      document.body.dataset.section = target;
     });
   });
 }
 
-function setupRenalButtons() {
-  const container = $("#renalDrugButtons");
-  renalButtonLabels.forEach(([label, drugName]) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = label;
-    button.dataset.drug = drugName;
-    button.addEventListener("click", () => selectRenalDose(drugName));
-    container.appendChild(button);
+function setupRenalDoseSelect() {
+  const select = $("#renalAntibiotic");
+  if (!select) return;
+  renalDoseEntries.forEach((entry) => {
+    const option = document.createElement("option");
+    option.value = entry.name;
+    option.textContent = entry.name;
+    select.appendChild(option);
+  });
+}
+
+function setupRenalModeButtons() {
+  $$(".renal-mode-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      $$(".renal-mode-button").forEach((item) => item.classList.toggle("active", item === button));
+      renderRenalDose();
+    });
+  });
+}
+
+function setNoteStatus(message) {
+  setText("#noteStatus", message);
+  if (!message) return;
+  window.setTimeout(() => setText("#noteStatus", ""), 1800);
+}
+
+async function setupNoteActions() {
+  const note = $("#freeNote");
+  $("#clearNote")?.addEventListener("click", () => {
+    note.value = "";
+    note.focus();
+    setNoteStatus("Note cleared.");
+  });
+  $("#copyNote")?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(note.value);
+      setNoteStatus("Copied.");
+    } catch {
+      note.select();
+      document.execCommand("copy");
+      setNoteStatus("Copied.");
+    }
+  });
+  $("#pasteNote")?.addEventListener("click", async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const start = note.selectionStart ?? note.value.length;
+      const end = note.selectionEnd ?? note.value.length;
+      note.value = `${note.value.slice(0, start)}${text}${note.value.slice(end)}`;
+      note.focus();
+      note.selectionStart = note.selectionEnd = start + text.length;
+      setNoteStatus("Pasted.");
+    } catch {
+      setNoteStatus("Paste permission was blocked by the browser.");
+    }
+  });
+}
+
+function setupThemeToggle() {
+  const toggle = $("#themeToggle");
+  if (!toggle) return;
+  const savedTheme = localStorage.getItem("medicalCalculatorTheme");
+  if (savedTheme === "light") document.body.classList.add("light-theme");
+  const applyThemeIcon = () => {
+    const isLight = document.body.classList.contains("light-theme");
+    toggle.textContent = isLight ? "🌙" : "☀️";
+    toggle.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
+  };
+  applyThemeIcon();
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("light-theme");
+    const isLight = document.body.classList.contains("light-theme");
+    localStorage.setItem("medicalCalculatorTheme", isLight ? "light" : "dark");
+    applyThemeIcon();
   });
 }
 
@@ -575,8 +654,12 @@ function setupFastInputFlow() {
 }
 
 setDefaultDate();
+document.body.dataset.section = "due-date";
 setupTabs();
-setupRenalButtons();
+setupRenalDoseSelect();
+setupRenalModeButtons();
+setupNoteActions();
+setupThemeToggle();
 setupFastInputFlow();
 document.addEventListener("input", calculateAll);
 document.addEventListener("change", calculateAll);

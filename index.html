@@ -12,7 +12,10 @@
         <h1>Medical Calculator</h1>
         <p class="subtitle">Fast bedside calculations for OPD and ward workflow. Verify all outputs before clinical use.</p>
       </div>
-      <div class="privacy-note">Runs locally in your browser. No login, no server, no cloud storage.</div>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch theme">☀️</button>
+        <div class="privacy-note">Runs locally in your browser. No login, no server, no cloud storage.</div>
+      </div>
     </header>
 
     <nav class="section-tabs" aria-label="Calculator sections">
@@ -22,6 +25,7 @@
       <button class="tab-button" data-tab="crcl" type="button">🧪 Creatinine clearance</button>
       <button class="tab-button" data-tab="electrolyte" type="button">⚡ Electrolyte</button>
       <button class="tab-button" data-tab="fib" type="button">🧬 FIB-4 & APRI</button>
+      <button class="tab-button" data-tab="note" type="button">📝 Note</button>
     </nav>
 
     <main>
@@ -137,9 +141,22 @@
 
           <section class="calculator-card wide-card" id="renal-dose-card">
             <div class="card-header"><h2>Renal Dose of Antibiotics</h2><span class="beta-tag">Beta</span></div>
-            <div class="drug-buttons" id="renalDrugButtons"></div>
-            <div class="result-box result-span"><span>Selected renal dose</span><strong id="renalDoseResult">Select antibiotic</strong></div>
-            <p class="formula-note">Screening aid only. Verify with local renal dosing guideline, indication, severity, dialysis status, and pharmacist/ID team.</p>
+            <div class="renal-mode-buttons" aria-label="Renal support">
+              <button class="renal-mode-button active" data-renal-mode="crcl" type="button">Default</button>
+              <button class="renal-mode-button" data-renal-mode="ihd" type="button">Hemodialysis</button>
+              <button class="renal-mode-button" data-renal-mode="crrt" type="button">CRRT</button>
+            </div>
+            <label>Antibiotic
+              <select id="renalAntibiotic">
+                <option value="">Select antibiotic</option>
+              </select>
+            </label>
+            <div class="result-box result-span renal-result">
+              <span>Selected renal dose</span>
+              <strong id="renalDoseTitle">Select antibiotic</strong>
+              <div id="renalDoseResult">-</div>
+            </div>
+            <p class="formula-note">Reference: Stanford Health Care Antimicrobial Dosing Reference Guide, ABX Subcommittee approved February 2026. Screening aid only. Verify indication, severity, dialysis details, and local protocol.</p>
           </section>
         </div>
       </section>
@@ -230,9 +247,25 @@
           </section>
         </div>
       </section>
+
+      <section class="tab-page note-theme" id="note">
+        <div class="dashboard">
+          <section class="calculator-card wide-card note-card" id="note-card">
+            <div class="card-header"><h2>Note</h2></div>
+            <textarea id="freeNote" lang="th" spellcheck="true" placeholder="พิมพ์โน้ตได้ที่นี่ / Type notes here"></textarea>
+            <div class="note-actions">
+              <button id="clearNote" type="button">Clear</button>
+              <button id="copyNote" type="button">Copy</button>
+              <button id="pasteNote" type="button">Paste</button>
+            </div>
+            <p class="formula-note" id="noteStatus" aria-live="polite"></p>
+          </section>
+        </div>
+      </section>
     </main>
 
     <footer class="app-footer">
+      <p>Created by Pitchakorn Puangpornsri, MD. If there is any problem, please contact me directly.</p>
       <p>Clinical note: this app is a calculation aid only. Verify all outputs before use in patient care.</p>
       <p>References: <a href="https://idmp.ucsf.edu/adult-antimicrobial-dosing-non-dialysis">UCSF IDMP antimicrobial dosing</a>, <a href="https://www.cdc.gov/tb/hcp/treatment/tuberculosis-disease.html">CDC TB treatment</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/fib-4">Hepatitis C Online FIB-4</a>, <a href="https://www.hepatitisc.uw.edu/page/clinical-calculators/apri">Hepatitis C Online APRI</a></p>
     </footer>

@@ -28,6 +28,23 @@ body {
   line-height: 1.55;
 }
 
+body.light-theme {
+  color-scheme: light;
+  --bg: #f6f2ea;
+  --panel: #fffaf1;
+  --panel-soft: #fbf4e7;
+  --field: #fffdf8;
+  --text: #201f1d;
+  --muted: #625f59;
+  --line: #ded6ca;
+  --line-strong: #c8bdae;
+  --section-soft: rgba(220, 145, 82, 0.16);
+  --shadow: 0 16px 34px rgba(68, 48, 28, 0.12);
+  background:
+    radial-gradient(circle at top left, rgba(218, 171, 100, 0.22), transparent 34rem),
+    linear-gradient(180deg, #fffaf1 0, var(--bg) 52rem);
+}
+
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -72,16 +89,39 @@ h3 {
   font-size: 1.03rem;
 }
 
+.header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
 .privacy-note {
   align-self: flex-start;
   max-width: 270px;
   padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #101010;
-  color: #d8d8d8;
+  background: var(--panel-soft);
+  color: var(--text);
   font-size: 0.94rem;
   font-weight: 650;
+}
+
+.theme-toggle {
+  display: grid;
+  width: 42px;
+  min-height: 42px;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--field);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 0;
 }
 
 .section-tabs {
@@ -98,7 +138,8 @@ h3 {
 }
 
 .tab-button,
-.drug-buttons button {
+.renal-mode-button,
+.note-actions button {
   min-height: 40px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -113,17 +154,54 @@ h3 {
 }
 
 .tab-button:hover,
-.drug-buttons button:hover {
+.renal-mode-button:hover,
+.note-actions button:hover,
+.theme-toggle:hover {
   border-color: var(--line-strong);
   background: #181818;
-  color: #ffffff;
+  color: var(--text);
 }
 
 .tab-button.active,
-.drug-buttons button.active {
+.renal-mode-button.active {
   border-color: var(--section);
   background: var(--section);
   color: #050505;
+}
+
+
+body[data-section="due-date"] { --section: #f3d5a6; }
+body[data-section="warfarin"] { --section: #f1b8b8; }
+body[data-section="anti-tb"] { --section: #efd08a; }
+body[data-section="crcl"] { --section: #d9c2f0; }
+body[data-section="electrolyte"] { --section: #f1e3a3; }
+body[data-section="fib"] { --section: #e8b7d6; }
+body[data-section="note"] { --section: #e9c9a9; }
+
+
+.renal-mode-buttons,
+.note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.renal-mode-button,
+.note-actions button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #0d0d0d;
+  color: #d6d6d6;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
+.note-actions {
+  justify-content: flex-end;
 }
 
 .tab-page {
@@ -164,6 +242,11 @@ h3 {
   --section-soft: rgba(232, 183, 214, 0.13);
 }
 
+.note-theme {
+  --section: #e9c9a9;
+  --section-soft: rgba(233, 201, 169, 0.13);
+}
+
 .dashboard {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -183,7 +266,7 @@ h3 {
   border-radius: 8px;
   background:
     linear-gradient(180deg, var(--section-soft) 0, rgba(10, 10, 10, 0) 42%),
-    linear-gradient(180deg, var(--panel) 0, #0d0d0d 100%);
+    linear-gradient(180deg, var(--panel) 0, var(--field) 100%);
   box-shadow: var(--shadow);
 }
 
@@ -203,13 +286,14 @@ fieldset {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: #d0d0d0;
+  color: var(--muted);
   font-size: 0.95rem;
   font-weight: 650;
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   min-height: 42px;
   border: 1px solid var(--line-strong);
@@ -229,7 +313,8 @@ select {
 }
 
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: var(--section);
   outline: 3px solid color-mix(in srgb, var(--section) 22%, transparent);
 }
@@ -253,7 +338,7 @@ select:focus {
 .subpanel {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #0b0b0b;
+  background: var(--panel-soft);
   padding: 12px;
 }
 
@@ -269,7 +354,7 @@ select:focus {
 .segmented legend {
   width: 100%;
   margin-bottom: 2px;
-  color: #d0d0d0;
+  color: var(--muted);
   font-size: 0.95rem;
   font-weight: 650;
 }
@@ -282,7 +367,7 @@ select:focus {
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 8px 12px;
-  background: #0b0b0b;
+  background: var(--panel-soft);
 }
 
 .segmented input {
@@ -301,7 +386,7 @@ select:focus {
 .drug-box {
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: linear-gradient(180deg, var(--section-soft), #0a0a0a 56%);
+  background: linear-gradient(180deg, var(--section-soft), var(--field) 56%);
   padding: 12px;
 }
 
@@ -322,7 +407,7 @@ select:focus {
 .drug-box strong {
   display: block;
   margin-top: 5px;
-  color: #ffffff;
+  color: var(--text);
   font-size: 1.42rem;
   line-height: 1.22;
   overflow-wrap: anywhere;
@@ -340,7 +425,7 @@ select:focus {
 }
 
 .drug-box span {
-  color: #c4c4c4;
+  color: var(--muted);
   font-size: 0.9rem;
   text-transform: none;
 }
@@ -349,11 +434,6 @@ select:focus {
   font-size: 1.08rem;
 }
 
-.drug-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
 
 .beta-tag {
   align-self: flex-start;
@@ -364,6 +444,83 @@ select:focus {
   font-weight: 800;
   padding: 3px 8px;
   text-transform: uppercase;
+}
+
+
+.renal-result strong {
+  margin-bottom: 10px;
+}
+
+.renal-dose-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text);
+  font-size: 0.98rem;
+}
+
+.renal-dose-table td {
+  border-top: 1px solid var(--line);
+  padding: 9px 8px;
+  vertical-align: top;
+}
+
+.renal-dose-table td:first-child {
+  width: 38%;
+  color: var(--section);
+  font-weight: 800;
+}
+
+.note-card {
+  grid-column: 1 / -1;
+}
+
+textarea {
+  min-height: 430px;
+  resize: vertical;
+}
+
+body.light-theme .app-header,
+body.light-theme .section-tabs {
+  background: rgba(255, 250, 241, 0.92);
+}
+
+body.light-theme .tab-button,
+body.light-theme .renal-mode-button,
+body.light-theme .note-actions button {
+  background: #fffdf8;
+  color: #393631;
+}
+
+body.light-theme .tab-button:hover,
+body.light-theme .renal-mode-button:hover,
+body.light-theme .note-actions button:hover,
+body.light-theme .theme-toggle:hover {
+  background: #fff5e7;
+  color: #171513;
+}
+
+body.light-theme .tab-button.active,
+body.light-theme .renal-mode-button.active {
+  border-color: #5d3900;
+  box-shadow: 0 0 0 3px rgba(93, 57, 0, 0.22), 0 10px 24px rgba(93, 57, 0, 0.16);
+  color: #1a1204;
+}
+
+body.light-theme input:focus,
+body.light-theme select:focus,
+body.light-theme textarea:focus {
+  border-color: #5d3900;
+  outline: 3px solid rgba(93, 57, 0, 0.24);
+  box-shadow: 0 0 0 1px rgba(93, 57, 0, 0.38) inset;
+}
+
+body.light-theme .result-box:focus-within,
+body.light-theme .calculator-card:focus-within {
+  border-color: #8c5d14;
+}
+
+body.light-theme .app-footer a {
+  color: #201f1d;
 }
 
 .interpretation {
@@ -381,7 +538,7 @@ select:focus {
 }
 
 .warning-note {
-  color: #f1f1f1;
+  color: var(--text);
   border-left: 3px solid var(--section);
   padding-left: 10px;
 }
@@ -415,6 +572,10 @@ select:focus {
 @media (max-width: 760px) {
   .app-header {
     flex-direction: column;
+  }
+
+  .header-actions {
+    align-items: stretch;
   }
 
   .privacy-note {
