@@ -1,44 +1,65 @@
 # Medical Calculator
 
-A local-first medical calculator dashboard for common internal medicine and cardiology-adjacent workflow calculations.
+Medical Calculator is a local-first, static web app for fast bedside calculations in OPD and ward workflow.
 
-The app is designed as a lightweight personal clinical aid: fast to open, simple to use, and free to host as a static website.
+It is built as a lightweight clinical aid: no login, no backend server, no database, no cloud storage, and no paid API.
 
 ## Live Site
 
-If GitHub Pages is enabled, the app should be available at:
+If GitHub Pages is enabled, the app is available at:
 
 https://pheseems.github.io/Medical-Calculator/
 
-## Included Calculators
+If the online page looks outdated after an update, hard refresh the browser or open the URL with a cache-busting query such as:
 
-- Calendar due date and appointment date
-- Warfarin tablet count
-- Warfarin dose change
-- Anti-TB dosage
-- Creatinine clearance by Cockcroft-Gault
-- Renal dose screening for selected antibiotics
-- FIB-4 and APRI score with interpretation
-- Corrected calcium for hypoalbuminemia
-- Corrected sodium for hyperglycemia
-- Bicarbonate deficit
-- Water deficit
+```text
+https://pheseems.github.io/Medical-Calculator/?v=latest
+```
 
-## Design Goals
+## Included Tools
 
-- Run entirely in the browser
-- No backend server
-- No database
-- No login
-- No paid API
-- Low-friction use during OPD or ward workflow
-- Keep calculations visible and auditable
+- Due date
+  - Calendar due date
+  - Appointment date by week or month
+- Warfarin
+  - Tablet count
+  - Weekly dose change
+- Anti-TB
+  - Weight-based dosing display
+  - Tablet/day suggestion where applicable
+  - Maximum-dose guardrails
+  - Amikacin IV dose display
+- CrCl & ATB
+  - Creatinine clearance by Cockcroft-Gault
+  - Renal dose screening for selected antibiotics
+  - Default, hemodialysis, and CRRT dosing modes
+- Electrolyte
+  - Corrected sodium
+  - Corrected calcium
+  - Bicarbonate deficit
+  - Water deficit
+- FIB-4 & APRI
+  - HBV, HCV, and MASLD interpretation modes
+  - AST ULN selection by sex
+- Note
+  - Free-text note box with clear, copy, and paste actions
+
+## Design
+
+- Dark theme by default
+- Optional light theme
+- Compact medical dashboard layout
+- Responsive design for desktop, tablet, and smartphone screens
+- Pastel accent colors by section
+- Vertical scrolling only on mobile portrait screens
 
 ## Privacy
 
-All calculations run locally in the browser. The app does not send patient data to a server.
+All calculations run locally in the browser.
 
-Privacy may change if future versions add analytics, login, a database, cloud AI, or third-party integrations.
+The app does not send patient data to a server and does not store data in cloud storage.
+
+Privacy assumptions may change if future versions add analytics, login, database storage, AI features, or third-party integrations.
 
 ## Clinical Safety
 
@@ -47,20 +68,21 @@ This app is a calculation aid only. It is not a medical authority and should not
 Before using any result in patient care, verify:
 
 - patient-specific context
-- local hospital guideline
+- indication and disease severity
 - renal and hepatic function
 - contraindications
 - drug interactions
 - pregnancy status when relevant
-- dosing limits and formulation availability
+- local hospital guideline
+- dosing limits and available formulations
 
-Anti-TB and warfarin outputs especially require clinical review.
+Anti-TB, warfarin, and renal-dose outputs require clinical review before use.
 
 ## How to Run Locally
 
 Open `index.html` directly in a browser.
 
-For a local preview server:
+Optional local preview server:
 
 ```bash
 python3 -m http.server 8000
@@ -77,8 +99,9 @@ http://localhost:8000
 ```text
 .
 ├── index.html      # App layout and calculator sections
-├── styles.css      # Dark pastel dashboard styling
+├── styles.css      # Dashboard theme, spacing, responsive layout
 ├── app.js          # Calculator formulas and input behavior
+├── README.md       # Project overview
 ├── DEPLOY.md       # Deployment instructions
 ├── netlify.toml    # Optional Netlify static hosting config
 └── .nojekyll       # GitHub Pages static site helper
@@ -88,7 +111,7 @@ http://localhost:8000
 
 This is a static website and can be hosted for free.
 
-Recommended:
+Recommended options:
 
 - GitHub Pages
 - Netlify
@@ -114,13 +137,19 @@ Current version:
 
 ## Development Notes
 
-This app intentionally uses plain HTML, CSS, and JavaScript. That keeps the project easy to understand, edit, and deploy without a build system.
+The app intentionally uses plain HTML, CSS, and JavaScript. This keeps it easy to understand, edit, and deploy without a build system.
 
-If the app grows larger, reasonable next steps would be:
+Reasonable next improvements:
 
+- add formula unit tests
 - split calculators into separate JavaScript modules
-- add unit tests for formulas
-- add calculator search/filter
-- add favorites
+- add print or copy-summary output
 - add Thai/English language toggle
-- add print or copy-to-clipboard summaries
+- add formula/reference modals
+- add calculator search or favorites
+
+## Creator
+
+Created by Pitchakorn Puangpornsri, MD.
+
+If there is any problem, please contact the creator directly.
