@@ -234,7 +234,7 @@ function setTbDrug(drug, minMg, maxMg, preparations, selectorPrefix, options = {
   setText(`#${selectorPrefix}Prep`, `${selected.tabletMg} mg`);
   setHTML(
     `#${selectorPrefix}Dose`,
-    `<span class="tb-tab-line">${formatTabs(selected.tabs)} tab/day</span><span class="tb-range-line">${Math.round(minMg)}-${Math.round(maxMg)} mg</span>`,
+    `<span class="tb-main-line">${formatTabs(selected.tabs)} tab/day</span><span class="tb-range-line">${Math.round(minMg)}-${Math.round(maxMg)} mg</span>`,
   );
 }
 
@@ -352,10 +352,10 @@ function calculateTbDose() {
   setText("#lfxPrep", "500 mg");
   setHTML(
     "#lfxDose",
-    `<span class="tb-tab-line">${formatTabs(Math.min(lfxTabs, 3))} tab/day</span><span class="tb-range-line">${Math.min(lfxDose, 1500)} mg</span>`,
+    `<span class="tb-main-line">${formatTabs(Math.min(lfxTabs, 3))} tab/day</span><span class="tb-range-line">${Math.min(lfxDose, 1500)} mg</span>`,
   );
-  setText("#amkPrep", "500 mg/ 2 ml");
-  setHTML("#amkDose", `<span class="tb-tab-line">Amikacin ${amkDose} mg IV OD</span>`);
+  setText("#amkPrep", "500 mg/ 2ml");
+  setHTML("#amkDose", `<span class="tb-main-line">${amkDose} mg IV OD</span>`);
 }
 
 function getCrClValue() {

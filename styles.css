@@ -39,12 +39,13 @@ html {
 
 body {
   min-width: 0;
+  min-height: 140vh;
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 8% 0%, rgba(178, 132, 229, 0.17), transparent 26rem),
-    radial-gradient(circle at 96% 5%, rgba(235, 185, 120, 0.08), transparent 24rem),
-    linear-gradient(180deg, #010205 0%, var(--bg) 44rem, #010205 100%);
+    radial-gradient(circle at 8% 0%, rgba(178, 132, 229, 0.17), transparent 28rem),
+    radial-gradient(circle at 96% 5%, rgba(235, 185, 120, 0.08), transparent 26rem),
+    linear-gradient(180deg, #010205 0%, var(--bg) 62rem, #010205 100%);
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(15px, 1.4vw, 17px);
@@ -53,8 +54,8 @@ body {
 
 body.light-theme {
   background:
-    radial-gradient(circle at 8% 0%, rgba(191, 143, 220, 0.2), transparent 25rem),
-    radial-gradient(circle at 94% 8%, rgba(231, 172, 115, 0.16), transparent 24rem),
+    radial-gradient(circle at 8% 0%, rgba(191, 143, 220, 0.2), transparent 30rem),
+    radial-gradient(circle at 94% 8%, rgba(231, 172, 115, 0.16), transparent 30rem),
     linear-gradient(180deg, #fffaf3 0%, var(--bg) 100%);
 }
 
@@ -76,6 +77,7 @@ p {
 h1 {
   margin-bottom: 4px;
   font-size: clamp(1.65rem, 3.3vw, 2.85rem);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.02;
   letter-spacing: 0;
 }
@@ -144,23 +146,7 @@ body.light-theme .app-header {
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 14px;
-}
-
-.app-icon {
-  display: grid;
-  flex: 0 0 auto;
-  width: clamp(50px, 6vw, 66px);
-  aspect-ratio: 1;
-  place-items: center;
-  border: 1px solid rgba(216, 181, 246, 0.48);
-  border-radius: 14px;
-  background: linear-gradient(145deg, rgba(216, 181, 246, 0.95), rgba(164, 132, 218, 0.72));
-  box-shadow: 0 16px 38px rgba(158, 113, 206, 0.24);
-  color: #ffffff;
-  font-size: clamp(2.6rem, 5vw, 3.45rem);
-  font-weight: 650;
-  line-height: 1;
+  gap: 0;
 }
 
 .subtitle {
@@ -429,11 +415,13 @@ body.light-theme .calculator-card {
 #crcl-card {
   --accent: #d7b9f5;
   --accent-soft: rgba(215, 185, 245, 0.17);
+  padding-top: clamp(14px, 2vw, 22px);
 }
 
 #renal-dose-card {
   --accent: #c8b2e9;
   --accent-soft: rgba(200, 178, 233, 0.16);
+  padding-top: clamp(14px, 2vw, 22px);
 }
 
 .wide-card,
@@ -449,16 +437,18 @@ body.light-theme .calculator-card {
 
 .card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+  min-height: 34px;
 }
 
 .card-header h2 {
   display: inline-flex;
   align-items: center;
   gap: 9px;
+  padding-top: 3px;
 }
 
 .ghost-button {
@@ -644,7 +634,7 @@ body.light-theme textarea:focus {
 }
 
 .crcl-result strong {
-  font-size: clamp(1.8rem, 4.4vw, 2.75rem);
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
 }
 
 .clinical-note,
@@ -763,20 +753,20 @@ body.light-theme textarea:focus {
   position: absolute;
   left: 14px;
   right: 14px;
-  top: 50px;
+  top: 52px;
   height: 1px;
   background: color-mix(in srgb, var(--accent) 22%, var(--line));
 }
 
 .drug-box h3 {
-  margin: 0 0 14px;
+  margin: 0 0 18px;
   font-size: 0.98rem;
   line-height: 1.15;
 }
 
 .drug-box > span {
   display: block;
-  margin-top: 3px;
+  margin-top: 5px;
   color: var(--text);
   font-size: clamp(1.2rem, 1.8vw, 1.45rem);
   font-weight: 850;
@@ -804,10 +794,11 @@ body.light-theme textarea:focus {
   white-space: normal;
 }
 
+.tb-main-line,
 .tb-tab-line {
   display: block;
-  font-size: clamp(1.65rem, 2.7vw, 2.25rem);
-  font-weight: 900;
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  font-weight: 850;
   line-height: 1.08;
 }
 
@@ -972,12 +963,7 @@ body.light-theme .footer-item a {
 
   .brand-block {
     align-items: flex-start;
-    gap: 10px;
-  }
-
-  .app-icon {
-    width: 44px;
-    border-radius: 12px;
+    gap: 0;
   }
 
   .header-actions {
@@ -1060,10 +1046,6 @@ body.light-theme .footer-item a {
   .three-column {
     flex-basis: 100%;
     grid-template-columns: 1fr;
-  }
-
-  .brand-block {
-    display: grid;
   }
 
   .hero-badges {
