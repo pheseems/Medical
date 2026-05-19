@@ -150,15 +150,17 @@ body.light-theme .app-header {
 .app-icon {
   display: grid;
   flex: 0 0 auto;
-  width: clamp(46px, 6vw, 62px);
+  width: clamp(50px, 6vw, 66px);
   aspect-ratio: 1;
   place-items: center;
   border: 1px solid rgba(216, 181, 246, 0.48);
   border-radius: 14px;
   background: linear-gradient(145deg, rgba(216, 181, 246, 0.95), rgba(164, 132, 218, 0.72));
   box-shadow: 0 16px 38px rgba(158, 113, 206, 0.24);
-  color: #17111f;
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  color: #ffffff;
+  font-size: clamp(2.6rem, 5vw, 3.45rem);
+  font-weight: 650;
+  line-height: 1;
 }
 
 .subtitle {
@@ -488,6 +490,44 @@ label {
   font-weight: 700;
 }
 
+.calculator-card > label,
+.calculator-card > .two-column,
+.calculator-card > .three-column,
+.calculator-card > .warfarin-grid,
+.calculator-card > .segmented,
+.calculator-card > .renal-mode-buttons,
+.calculator-card > .drug-grid,
+.calculator-card > .warning-note {
+  margin-top: var(--gap);
+}
+
+.calculator-card > .card-header + label,
+.calculator-card > .card-header + .two-column,
+.calculator-card > .card-header + .three-column,
+.calculator-card > .card-header + .renal-mode-buttons {
+  margin-top: 0;
+}
+
+.calculator-card > label + label,
+.calculator-card > label + .result-box,
+.calculator-card > label + .result-grid,
+.calculator-card > label + .segmented,
+.calculator-card > .two-column + label,
+.calculator-card > .two-column + .result-box,
+.calculator-card > .two-column + .result-grid,
+.calculator-card > .two-column + .segmented,
+.calculator-card > .three-column + label,
+.calculator-card > .three-column + .result-box,
+.calculator-card > .three-column + .result-grid,
+.calculator-card > .three-column + .segmented,
+.calculator-card > .segmented + .result-box,
+.calculator-card > .segmented + .result-grid,
+.calculator-card > .renal-mode-buttons + label,
+.calculator-card > .warning-note + .drug-grid,
+.calculator-card > .warfarin-grid + .result-grid {
+  margin-top: var(--gap);
+}
+
 input,
 select,
 textarea {
@@ -551,7 +591,7 @@ body.light-theme textarea:focus {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
   gap: var(--gap);
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 .result-span,
@@ -588,6 +628,12 @@ body.light-theme textarea:focus {
   line-height: 1.15;
 }
 
+.result-unit {
+  font-size: 0.58em;
+  font-weight: 750;
+  color: var(--muted);
+}
+
 .crcl-result {
   background:
     linear-gradient(135deg, rgba(215, 185, 245, 0.42), rgba(108, 132, 214, 0.28)),
@@ -603,7 +649,7 @@ body.light-theme textarea:focus {
 
 .clinical-note,
 .formula-note {
-  margin: 14px 0 0;
+  margin: var(--gap) 0 0;
   color: var(--muted);
   font-size: 0.88rem;
 }
@@ -629,7 +675,7 @@ body.light-theme textarea:focus {
   flex-wrap: wrap;
   gap: var(--gap);
   min-width: 0;
-  margin: 14px 0 0;
+  margin: 0;
   padding: 0;
   border: 0;
 }
@@ -661,7 +707,7 @@ body.light-theme textarea:focus {
 }
 
 .renal-result {
-  margin-top: 14px;
+  margin-top: var(--gap);
 }
 
 .renal-dose-table {
@@ -708,7 +754,7 @@ body.light-theme textarea:focus {
   position: relative;
   display: grid;
   align-content: start;
-  gap: 6px;
+  gap: 7px;
   border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
 }
 
@@ -717,13 +763,24 @@ body.light-theme textarea:focus {
   position: absolute;
   left: 14px;
   right: 14px;
-  top: 48px;
+  top: 50px;
   height: 1px;
   background: color-mix(in srgb, var(--accent) 22%, var(--line));
 }
 
 .drug-box h3 {
-  margin: 0 0 8px;
+  margin: 0 0 14px;
+  font-size: 0.98rem;
+  line-height: 1.15;
+}
+
+.drug-box > span {
+  display: block;
+  margin-top: 3px;
+  color: var(--text);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  font-weight: 850;
+  line-height: 1.1;
 }
 
 .result-table span,
@@ -739,6 +796,27 @@ body.light-theme textarea:focus {
   display: block;
   white-space: pre-line;
   overflow-wrap: anywhere;
+}
+
+.drug-box strong {
+  display: block;
+  color: var(--text);
+  white-space: normal;
+}
+
+.tb-tab-line {
+  display: block;
+  font-size: clamp(1.65rem, 2.7vw, 2.25rem);
+  font-weight: 900;
+  line-height: 1.08;
+}
+
+.tb-range-line {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.96rem;
+  font-weight: 680;
 }
 
 .drug-prep,
@@ -794,19 +872,20 @@ body.light-theme .condition-buttons label:has(input:checked) {
 .app-footer {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
+  margin-top: 10px;
   padding: 0;
 }
 
 .footer-item {
   min-width: 0;
-  padding: 13px;
+  padding: 9px 10px;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  background: rgba(11, 15, 24, 0.72);
+  border-radius: 10px;
+  background: rgba(11, 15, 24, 0.46);
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.76rem;
+  line-height: 1.35;
 }
 
 body.light-theme .footer-item {
@@ -815,9 +894,9 @@ body.light-theme .footer-item {
 
 .footer-item strong {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 0.78rem;
 }
 
 .footer-item p {
@@ -826,13 +905,14 @@ body.light-theme .footer-item {
 
 .footer-icon {
   display: inline-grid;
-  width: 34px;
+  width: 24px;
   aspect-ratio: 1;
   place-items: center;
-  margin-bottom: 8px;
-  border-radius: 10px;
+  margin-bottom: 5px;
+  border-radius: 7px;
   background: var(--accent-soft);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
+  font-size: 0.78rem;
 }
 
 .footer-item a {

@@ -10,7 +10,7 @@
     <div class="app-shell">
       <header class="app-header">
         <div class="brand-block">
-          <div class="app-icon" aria-hidden="true">🩺</div>
+          <div class="app-icon" aria-hidden="true">+</div>
           <div>
             <h1>Medical Calculator</h1>
             <p class="subtitle">Fast bedside calculations for OPD and ward workflow.</p>
@@ -30,7 +30,7 @@
         <button class="tab-button active" data-tab="due-date" type="button"><span>📅</span> Due date</button>
         <button class="tab-button" data-tab="warfarin" type="button"><span>🩸</span> Warfarin</button>
         <button class="tab-button" data-tab="anti-tb" type="button"><span>🫁</span> Anti-TB</button>
-        <button class="tab-button" data-tab="crcl" type="button"><span>🧪</span> Creatinine clearance</button>
+        <button class="tab-button" data-tab="crcl" type="button"><span>🧪</span> CrCl & ATB</button>
         <button class="tab-button" data-tab="electrolyte" type="button"><span>💧</span> Electrolyte</button>
         <button class="tab-button" data-tab="fib" type="button"><span>🧬</span> FIB-4 & APRI</button>
         <button class="tab-button" data-tab="note" type="button"><span>📝</span> Note</button>
@@ -132,7 +132,7 @@
       <section class="tab-page crcl-theme" id="crcl">
         <div class="dashboard">
           <section class="calculator-card" id="crcl-card">
-            <div class="card-header"><h2><span class="card-icon">🧪</span> Creatinine Clearance</h2><button class="ghost-button" type="button" title="Cockcroft-Gault: ((140 - age) x weight x sex factor) / (72 x SCr)">Formula</button></div>
+            <div class="card-header"><h2>Creatinine Clearance</h2><button class="ghost-button" type="button" title="Cockcroft-Gault: ((140 - age) x weight x sex factor) / (72 x SCr)">Formula</button></div>
             <div class="three-column">
               <label>Age <input id="crclAge" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="65" /></label>
               <label>Weight (kg) <input id="crclWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
@@ -178,7 +178,7 @@
               <label>Measured sodium (mmol/L) <input id="sodium" type="number" inputmode="decimal" step="0.1" value="130" /></label>
               <label>Glucose (mg/dL) <input id="glucose" type="number" inputmode="numeric" min="0" step="1" value="400" /></label>
             </div>
-            <fieldset class="segmented">
+            <fieldset class="segmented condition-buttons">
               <legend>Correction factor per 100 mg/dL glucose above 100</legend>
               <label><input type="radio" name="naFactor" value="1.6" checked /> 1.6</label>
               <label><input type="radio" name="naFactor" value="2.4" /> 2.4</label>

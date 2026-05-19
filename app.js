@@ -232,7 +232,10 @@ function chooseTabletOption(minMg, maxMg, preparations, options = {}) {
 function setTbDrug(drug, minMg, maxMg, preparations, selectorPrefix, options = {}) {
   const selected = chooseTabletOption(minMg, maxMg, preparations, options);
   setText(`#${selectorPrefix}Prep`, `${selected.tabletMg} mg`);
-  setText(`#${selectorPrefix}Dose`, `${Math.round(minMg)}-${Math.round(maxMg)} mg or ${formatTabs(selected.tabs)} tab/day`);
+  setHTML(
+    `#${selectorPrefix}Dose`,
+    `<span class="tb-tab-line">${formatTabs(selected.tabs)} tab/day</span><span class="tb-range-line">${Math.round(minMg)}-${Math.round(maxMg)} mg</span>`,
+  );
 }
 
 function calculateCalendar() {
@@ -313,7 +316,7 @@ function calculateWarfarinDoseChange() {
   const actualChange = (roundedDose / originalDose) * 100 - 100;
   const doseDifference = roundedDose - originalDose;
 
-  setText("#warfarinChangedDose", `${formatTabs(roundedDose)} mg/week`);
+  setHTML("#warfarinChangedDose", `${formatTabs(roundedDose)} <span class="result-unit">mg/week</span>`);
   setText("#warfarinActualChange", `${round(actualChange, 1)}%`);
   setText("#warfarinDoseDifference", `${doseDifference >= 0 ? "+" : ""}${formatTabs(doseDifference)} mg/week`);
 }
@@ -326,7 +329,7 @@ function calculateTbDose() {
   }
 
   if (weight < 5) {
-    ["#inhDose", "#rifDose", "#pzaDose", "#embDose", "#lfxDose", "#amkDose"].forEach((selector) => setText(selector, "Invalid if BW < 5 kg"));
+    ["#inhDose", "#rifDose", "#pzaDose", "#embDose", "#lfxDose", "#amkDose"].forEach((selector) => setHTML(selector, '<span class="tb-range-line">Invalid if BW &lt; 5 kg</span>'));
     return;
   }
 
@@ -347,9 +350,12 @@ function calculateTbDose() {
   setTbDrug("Pyrazinamide", pzaMin, pzaMax, [500, 1000], "pza", { maxDose: 2000 });
   setTbDrug("Ethambutol", embMin, embMax, [400, 500], "emb", { maxDose: 1200 });
   setText("#lfxPrep", "500 mg");
-  setText("#lfxDose", `${Math.min(lfxDose, 1500)} mg or ${formatTabs(Math.min(lfxTabs, 3))} tab/day`);
+  setHTML(
+    "#lfxDose",
+    `<span class="tb-tab-line">${formatTabs(Math.min(lfxTabs, 3))} tab/day</span><span class="tb-range-line">${Math.min(lfxDose, 1500)} mg</span>`,
+  );
   setText("#amkPrep", "500 mg/ 2 ml");
-  setText("#amkDose", `Amikacin ${amkDose} mg IV OD`);
+  setHTML("#amkDose", `<span class="tb-tab-line">Amikacin ${amkDose} mg IV OD</span>`);
 }
 
 function getCrClValue() {
