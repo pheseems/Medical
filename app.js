@@ -184,6 +184,9 @@ const warfarinInteractionEntries = [
 ];
 
 const warfarinInteractionMap = new Map(warfarinInteractionEntries.flatMap((entry) => entry.drugs.map((drug) => [drug, entry])));
+const warfarinInteractionOptions = warfarinInteractionEntries
+  .flatMap((entry) => entry.drugs.map((drug) => ({ drug, entry })))
+  .sort((a, b) => a.drug.localeCompare(b.drug));
 
 function numberValue(selector) {
   const value = Number($(selector).value);
@@ -368,6 +371,35 @@ function calculateWarfarinDoseChange() {
   setText("#warfarinDoseDifference", `${doseDifference >= 0 ? "+" : ""}${formatTabs(doseDifference)} mg/week`);
 }
 
+function warfarinManagementArrow(text) {
+  const lower = text.toLowerCase();
+  if (lower.includes("increase warfarin dose") || lower.startsWith("increase")) return "⬆️";
+  if (lower.includes("decrease warfarin dose") || lower.startsWith("decrease") || lower.includes("decrease 10")) return "⬇️";
+  return "";
+}
+
+function withWarfarinArrow(text) {
+  const arrow = warfarinManagementArrow(text);
+  return arrow ? `${text} ${arrow}` : text;
+}
+
+function calculateWarfarinAdjustment() {
+  const inr = numberValue("#warfarinAdjustmentInr");
+  let management = "-";
+
+  if (inr !== null && inr >= 0) {
+    if (inr < 1.5) management = "Increase 10-20%";
+    else if (inr < 2) management = "Increase 5-10%";
+    else if (inr <= 3) management = "No change";
+    else if (inr > 9) management = "Vitamin K 5-10 mg PO";
+    else if (inr > 5) management = "Hold 2 days and Vitamin K 1 mg PO";
+    else if (inr > 4) management = "Hold 1 day and decrease 10%";
+    else if (inr > 3) management = "Decrease 5-10%";
+  }
+
+  setText("#warfarinAdjustmentManagement", withWarfarinArrow(management));
+}
+
 function renderWarfarinInteraction() {
   const selectedDrug = $("#warfarinInteractionDrug")?.value;
   const entry = warfarinInteractionMap.get(selectedDrug);
@@ -379,7 +411,7 @@ function renderWarfarinInteraction() {
     return;
   }
 
-  setText("#warfarinInteractionManagement", entry.management);
+  setText("#warfarinInteractionManagement", withWarfarinArrow(entry.management));
   setText("#warfarinInteractionOnset", entry.onset);
   setText("#warfarinInteractionRecheck", entry.recheck);
 }
@@ -577,6 +609,7 @@ function calculateAll() {
   calculateAppointment();
   calculateWarfarin();
   calculateWarfarinDoseChange();
+  calculateWarfarinAdjustment();
   renderWarfarinInteraction();
   calculateTbDose();
   calculateCrCl();
@@ -620,16 +653,11 @@ function setupWarfarinInteractionSelect() {
   const select = $("#warfarinInteractionDrug");
   if (!select) return;
 
-  warfarinInteractionEntries.forEach((entry) => {
-    const group = document.createElement("optgroup");
-    group.label = entry.group;
-    entry.drugs.forEach((drug) => {
-      const option = document.createElement("option");
-      option.value = drug;
-      option.textContent = drug;
-      group.appendChild(option);
-    });
-    select.appendChild(group);
+  warfarinInteractionOptions.forEach(({ drug }) => {
+    const option = document.createElement("option");
+    option.value = drug;
+    option.textContent = drug;
+    select.appendChild(option);
   });
 }
 

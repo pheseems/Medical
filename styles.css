@@ -662,6 +662,21 @@ body.light-theme textarea:focus {
   font-size: clamp(1.05rem, 1.6vw, 1.35rem);
 }
 
+.adjustment-result strong {
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+}
+
+.major-bleeding-note {
+  margin: var(--gap) 0 0;
+  padding: 12px 13px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 12%, rgba(255, 255, 255, 0.03));
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 760;
+}
+
 .interaction-details {
   display: grid;
   gap: 8px;
