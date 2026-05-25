@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Medical Calculator</title>
-    <link rel="stylesheet" href="styles.css?v=1212893" />
+    <link rel="stylesheet" href="styles.css?v=1212894" />
   </head>
   <body data-section="due-date">
     <div class="app-shell">
@@ -66,6 +66,38 @@
 
       <section class="tab-page warfarin-theme" id="warfarin">
         <div class="dashboard">
+          <section class="calculator-card wide-card" id="warfarin-adjustment-card">
+            <div class="card-header"><h2>Warfarin Adjustment</h2></div>
+            <div class="warfarin-adjustment-table">
+              <div class="table-row table-head"><span>INR</span><span>Managements</span></div>
+              <div class="table-row"><span>&lt; 1.5</span><span>Increase 10-20%</span></div>
+              <div class="table-row"><span>&lt; 2.0</span><span>Increase 5-10%</span></div>
+              <div class="table-row"><span>Between 2-3</span><span>No change</span></div>
+              <div class="table-row"><span>&gt; 3.0</span><span>Decrease 5-10%</span></div>
+              <div class="table-row"><span>&gt; 4.0</span><span>Hold 1 day and decrease 10%</span></div>
+              <div class="table-row"><span>&gt; 5.0</span><span>Hold 2 days and Vitamin K 1 mg PO</span></div>
+              <div class="table-row"><span>&gt; 9.0</span><span>Vitamin K 5-10 mg PO</span></div>
+              <div class="table-row"><span><em>Major bleeding</em> with any INR</span><span>FFP and Vitamin K 10 mg IV, repeat q 12 h if needed.</span></div>
+            </div>
+          </section>
+
+          <section class="calculator-card" id="warfarin-interaction-card">
+            <div class="card-header"><h2>Warfarin Drug Interaction</h2></div>
+            <label>Interacting drug
+              <select id="warfarinInteractionDrug">
+                <option value="">Select drug</option>
+              </select>
+            </label>
+            <div class="result-box wide interaction-result">
+              <span>Management</span>
+              <strong id="warfarinInteractionManagement">-</strong>
+              <dl class="interaction-details">
+                <div><dt>Onset</dt><dd id="warfarinInteractionOnset">-</dd></div>
+                <div><dt>Recheck INR</dt><dd id="warfarinInteractionRecheck">-</dd></div>
+              </dl>
+            </div>
+          </section>
+
           <section class="calculator-card wide-card" id="warfarin-card">
             <div class="card-header"><h2>Warfarin Tablet Count</h2></div>
             <label>Prescription duration (days) <input id="warfarinDays" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="28" /></label>
@@ -115,7 +147,7 @@
             <label>Body weight (kg) <input id="tbWeight" type="number" inputmode="decimal" min="1" step="0.1" value="60" /></label>
             <p class="warning-note">Invalid if patient body weight is less than 5 kg.</p>
             <div class="drug-grid">
-              <div class="drug-box"><h3>Isoniazid</h3><span id="inhPrep">300 mg</span><strong id="inhDose">-</strong></div>
+              <div class="drug-box"><h3>Isoniazid</h3><span id="inhPrep">100 mg</span><strong id="inhDose">-</strong></div>
               <div class="drug-box"><h3>Rifampicin</h3><span id="rifPrep">-</span><strong id="rifDose">-</strong></div>
               <div class="drug-box"><h3>Pyrazinamide</h3><span id="pzaPrep">-</span><strong id="pzaDose">-</strong></div>
               <div class="drug-box"><h3>Ethambutol</h3><span id="embPrep">-</span><strong id="embDose">-</strong></div>
@@ -288,6 +320,6 @@
       </footer>
     </div>
 
-    <script src="app.js?v=1212893"></script>
+    <script src="app.js?v=1212894"></script>
   </body>
 </html>

@@ -138,6 +138,53 @@ const renalDoseEntries = [
 
 const renalDoseMap = Object.fromEntries(renalDoseEntries.map((entry) => [entry.name, entry]));
 
+const warfarinInteractionEntries = [
+  {
+    group: "Increase INR",
+    drugs: ["Fluoroquinolones", "Macrolides", "TMP/Sulfa", "Metronidazole"],
+    onset: "Within 3-5 days",
+    management: "Decrease warfarin dose 30%",
+    recheck: "After 5-7 days of starting or discontinuing therapy",
+  },
+  {
+    group: "Increase INR",
+    drugs: ["Fluconazole", "Itraconazole", "Ketoconazole", "Posaconazole", "Voriconazole"],
+    onset: "Within 3-5 days",
+    management: "Decrease warfarin dose 30%",
+    recheck: "After 5-7 days of starting or discontinuing therapy",
+  },
+  {
+    group: "Increase INR",
+    drugs: ["Amiodarone"],
+    onset: "Within 7-14 days",
+    management: "Decrease warfarin dose 50%",
+    recheck: "Every 7 days for 1 month after starting or discontinuing therapy",
+  },
+  {
+    group: "Decrease INR",
+    drugs: ["Dicloxacillin", "Nafcillin"],
+    onset: "Within 4-7 days",
+    management: "Increase warfarin dose 30%",
+    recheck: "After 5-7 days of starting or discontinuing therapy",
+  },
+  {
+    group: "Decrease INR",
+    drugs: ["Rifampin"],
+    onset: "Within 7-14 days",
+    management: "Increase warfarin dose 50-60%",
+    recheck: "Every 7 days for 1 month after starting or discontinuing therapy",
+  },
+  {
+    group: "Decrease INR",
+    drugs: ["Carbamazepine"],
+    onset: "Within 14 days",
+    management: "Increase warfarin dose 30%",
+    recheck: "Every 7 days for 1 month after starting or discontinuing therapy",
+  },
+];
+
+const warfarinInteractionMap = new Map(warfarinInteractionEntries.flatMap((entry) => entry.drugs.map((drug) => [drug, entry])));
+
 function numberValue(selector) {
   const value = Number($(selector).value);
   return Number.isFinite(value) ? value : null;
@@ -321,6 +368,22 @@ function calculateWarfarinDoseChange() {
   setText("#warfarinDoseDifference", `${doseDifference >= 0 ? "+" : ""}${formatTabs(doseDifference)} mg/week`);
 }
 
+function renderWarfarinInteraction() {
+  const selectedDrug = $("#warfarinInteractionDrug")?.value;
+  const entry = warfarinInteractionMap.get(selectedDrug);
+
+  if (!entry) {
+    setText("#warfarinInteractionManagement", "-");
+    setText("#warfarinInteractionOnset", "-");
+    setText("#warfarinInteractionRecheck", "-");
+    return;
+  }
+
+  setText("#warfarinInteractionManagement", entry.management);
+  setText("#warfarinInteractionOnset", entry.onset);
+  setText("#warfarinInteractionRecheck", entry.recheck);
+}
+
 function calculateTbDose() {
   const weight = numberValue("#tbWeight");
   if (!weight || weight <= 0) {
@@ -345,7 +408,7 @@ function calculateTbDose() {
   const lfxTabs = weight <= 45 ? 1.5 : 2;
   const amkDose = Math.min(roundToTens(weight * 15), 1000);
 
-  setTbDrug("Isoniazid", inhMin, inhMax, [300], "inh", { maxDose: 300 });
+  setTbDrug("Isoniazid", inhMin, inhMax, [100], "inh", { maxDose: 300 });
   setTbDrug("Rifampicin", rifMin, rifMax, [300, 450], "rif", { allowHalf: false, maxDose: 600 });
   setTbDrug("Pyrazinamide", pzaMin, pzaMax, [500, 1000], "pza", { maxDose: 2000 });
   setTbDrug("Ethambutol", embMin, embMax, [400, 500], "emb", { maxDose: 1200 });
@@ -514,6 +577,7 @@ function calculateAll() {
   calculateAppointment();
   calculateWarfarin();
   calculateWarfarinDoseChange();
+  renderWarfarinInteraction();
   calculateTbDose();
   calculateCrCl();
   renderRenalDose();
@@ -549,6 +613,23 @@ function setupRenalDoseSelect() {
     option.value = entry.name;
     option.textContent = entry.name;
     select.appendChild(option);
+  });
+}
+
+function setupWarfarinInteractionSelect() {
+  const select = $("#warfarinInteractionDrug");
+  if (!select) return;
+
+  warfarinInteractionEntries.forEach((entry) => {
+    const group = document.createElement("optgroup");
+    group.label = entry.group;
+    entry.drugs.forEach((drug) => {
+      const option = document.createElement("option");
+      option.value = drug;
+      option.textContent = drug;
+      group.appendChild(option);
+    });
+    select.appendChild(group);
   });
 }
 
@@ -663,6 +744,7 @@ setDefaultDate();
 document.body.dataset.section = "due-date";
 setupTabs();
 setupRenalDoseSelect();
+setupWarfarinInteractionSelect();
 setupRenalModeButtons();
 setupNoteActions();
 setupThemeToggle();

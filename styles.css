@@ -624,6 +624,70 @@ body.light-theme textarea:focus {
   color: var(--muted);
 }
 
+.warfarin-adjustment-table {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(150px, 1fr);
+  border-top: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+}
+
+.table-row:first-child {
+  border-top: 0;
+}
+
+.table-row > span {
+  min-width: 0;
+  padding: 10px;
+  border-left: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  overflow-wrap: anywhere;
+}
+
+.table-row > span:first-child {
+  border-left: 0;
+}
+
+.table-head {
+  color: var(--text);
+  font-weight: 850;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.interaction-result strong {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+}
+
+.interaction-details {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.interaction-details div {
+  display: grid;
+  gap: 2px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.interaction-details dt {
+  color: color-mix(in srgb, var(--accent) 74%, white);
+  font-size: 0.76rem;
+  font-weight: 830;
+  text-transform: uppercase;
+}
+
+.interaction-details dd {
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
 .crcl-result {
   background:
     linear-gradient(135deg, rgba(215, 185, 245, 0.42), rgba(108, 132, 214, 0.28)),
